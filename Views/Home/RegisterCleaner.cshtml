@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design -->
+    <title>Register As Cleaner</title>
+
+    <link rel="stylesheet" href="~/css/RegisterCleaner.css" />
+</head>
+<body>
+
+    <img src="/images/SouthPointLogo(1).png" width="400" height="250" alt="Site Logo" />
+    <h1>Welcome!</h1>
+    <p>Enter the required details to Register</p>
+
+    <form asp-action="RegisterCleaner" method="post">
+
+        <!--input NAME-->
+        <input type="text" id="name" placeholder="Name (e.g., John)" />
+
+        <!--input EMAIL-->
+        <input type="email" id="email" placeholder="Email (e.g., johndoe@gmail.com)" />
+
+        <!--input PASSWORD-->
+        <input type="password" id="password" placeholder="Password" />
+
+        <!--input CONFIRM PASSWORD-->
+        <input type="password" id="confirmPasswordr" placeholder="Confirm Password" />
+
+        <button type="submit">Register</button>
+
+    </form>
+    <p>Already Registered? <a href="@Url.Action("LoginCleaner", "Home")">Login</a> </p>
+
+    <p><a href="@Url.Action("Register", "Home")">Register as Student</a></p>
+
+</body>
+</html>

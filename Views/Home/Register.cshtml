@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design -->
+    <title>Register</title>
+
+    <link rel="stylesheet" href="~/css/Register.css"/>
+</head>
+<body>
+
+    <img src="/images/SouthPointLogo(1).png" width="400" height="250" alt="Site Logo"/>
+    <h1>Welcome!</h1>
+    <p>Enter the required details to Register</p>
+
+        <form asp-action="Register" method="post">
+            
+            <!-- drop down for choosing rooms-->
+            <select id="room" name="room" required>
+                <option value="">Choose Room Number</option>
+
+                    <!-- Floor 1 -->
+                    <optgroup label="Floor 1">
+                        <option value="101">101</option>
+                        <option value="102">102</option>
+                        <option value="103">103</option>
+                        <option value="104">104</option>
+                        <option value="105">105</option>
+                        <option value="106">106</option>
+                        <option value="107">107</option>
+                        <option value="108">108</option>
+                        <option value="109">109</option>
+                        <option value="110">110</option>
+                    </optgroup>
+
+                    <!-- Floor 2 -->
+                    <optgroup label="Floor 2">
+                        <option value="201">201</option>
+                        <option value="202">202</option>
+                        <option value="203">203</option>
+                        <option value="204">204</option>
+                        <option value="205">205</option>
+                        <option value="206">206</option>
+                        <option value="207">207</option>
+                        <option value="208">208</option>
+                        <option value="209">209</option>
+                        <option value="210">210</option>
+                    </optgroup>
+
+                    <!-- Floor 3 -->
+                    <optgroup label="Floor 3">
+                        <option value="301">301</option>
+                        <option value="302">302</option>
+                        <option value="303">303</option>
+                        <option value="304">304</option>
+                        <option value="305">305</option>
+                        <option value="306">306</option>
+                        <option value="307">307</option>
+                        <option value="308">308</option>
+                        <option value="309">309</option>
+                        <option value="310">310</option>
+                    </optgroup>
+
+                    <!-- Floor 4 -->
+                    <optgroup label="Floor 4">
+                        <option value="401">401</option>
+                        <option value="402">402</option>
+                        <option value="403">403</option>
+                        <option value="404">404</option>
+                        <option value="405">405</option>
+                        <option value="406">406</option>
+                        <option value="407">407</option>
+                        <option value="408">408</option>
+                        <option value="409">409</option>
+                        <option value="410">410</option>
+                    </optgroup>
+
+                    <!-- Floor 5 -->
+                    <optgroup label="Floor 5">
+                        <option value="501">501</option>
+                        <option value="502">502</option>
+                        <option value="503">503</option>
+                        <option value="504">504</option>
+                        <option value="505">505</option>
+                        <option value="506">506</option>
+                        <option value="507">507</option>
+                        <option value="508">508</option>
+                        <option value="509">509</option>
+                        <option value="510">510</option>
+                    </optgroup>
+            </select>
+
+            <!--input NAME-->
+            <input type="text" id="name" placeholder="Name (e.g., John)"/>
+
+            <!--input EMAIL-->
+            <input type="email" id="email" placeholder="Email (e.g., johndoe@gmail.com)"/>
+
+            <!--input PASSWORD-->
+            <input type="password" id="password" placeholder="Password"/>
+
+            <!--input CONFIRM PASSWORD-->
+            <input type="password" id="confirmPasswordr" placeholder="Confirm Password"/>
+
+            <button type="submit">Register</button>
+
+        </form>
+    <p>Already Registered? <a href="@Url.Action("Login","Home")">Login</a> </p>
+
+    <p><a href="@Url.Action("RegisterCleaner", "Home")">Register as Cleaner</a></p>
+
+
+    <a href="@Url.Action("StudentHome","Student")">Student Dashboard</a>
+
+</body>
+</html>

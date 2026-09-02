@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design -->
+    <title>Login</title>
+
+    <link rel="stylesheet" href="~/css/Login.css"/>
+</head>
+<body>
+
+    <img src="/images/SouthPointLogo(1).png" width="400" height="250" alt="Site Logo" />
+    <h1>Welcome Back!</h1>
+    <p>Enter the required details to Login</p>
+
+    <form asp-action="Login" method="get">
+
+        <!--input EMAIL-->
+        <input type="email" id="email" placeholder="Email (e.g., johndoe@gmail.com)" />
+
+        <!--input PASSWORD-->
+        <input type="password" id="password" placeholder="Password" />
+
+        <button type="submit">Login</button>
+
+    </form>
+    <p>Haven't' Registered? <a href="@Url.Action("Register", "Home")">Register</a> </p>
+
+    <p><a href="@Url.Action("LoginCleaner", "Home")">Login as Cleaner</a></p>
+
+</body>
+</html>

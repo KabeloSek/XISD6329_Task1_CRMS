@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36705.20 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XISD6329_Task1_CRMS", "XISD6329_Task1_CRMS.csproj", "{C85CD6AE-7246-4F74-AE83-31B32E882910}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C85CD6AE-7246-4F74-AE83-31B32E882910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85CD6AE-7246-4F74-AE83-31B32E882910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85CD6AE-7246-4F74-AE83-31B32E882910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C85CD6AE-7246-4F74-AE83-31B32E882910}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6336EB4D-B955-44E1-A7C8-4273D94F44DE}
+	EndGlobalSection
+EndGlobal

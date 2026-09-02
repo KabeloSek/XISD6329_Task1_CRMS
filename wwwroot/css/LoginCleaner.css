@@ -1,0 +1,166 @@
+﻿:root {
+    --sp-orange: #f7941d; /* South Point primary brand orange (CTAs/accents) */
+    --sp-orange-dark: #d9770a; /* darker shade for hover/active states */
+    --sp-blue: #0055a5; /* South Point secondary brand blue */
+    --sp-blue-light: #e6f0fa; /* pale blue for backgrounds */
+    --sp-white: #ffffff;
+    --sp-grey-text: #4a4a4a;
+    --sp-grey-border: #d5dde5;
+    --sp-error: #d0342c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #e6f0fa;
+    color: var(--sp-grey-text);
+    padding: 40px 20px;
+}
+
+    body > img {
+        display: block;
+        margin: 0 auto;
+        object-fit: contain;
+        max-height: 140px;
+        width: auto;
+    }
+
+h1 {
+    color: var(--sp-blue);
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+    text-align: center;
+}
+
+body > p {
+    color: var(--sp-grey-text);
+    font-size: 0.95rem;
+    margin: 0 0 24px;
+    text-align: center;
+}
+
+form {
+    background: var(--sp-white);
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px 28px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 85, 165, 0.12);
+    border: 1px solid var(--sp-grey-border);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    border: 1px solid var(--sp-grey-border);
+    border-radius: 8px;
+    background: var(--sp-white);
+    color: var(--sp-grey-text);
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    input[type="text"]::placeholder,
+    input[type="email"]::placeholder,
+    input[type="password"]::placeholder {
+        color: #9aa5b1;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+        outline: none;
+        border-color: var(--sp-orange);
+        box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.18);
+    }
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230055a5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+    select:invalid {
+        color: #9aa5b1;
+    }
+
+optgroup {
+    color: var(--sp-blue);
+    font-weight: 600;
+    font-style: normal;
+}
+
+option {
+    color: var(--sp-grey-text);
+}
+
+button[type="submit"] {
+    background: #0055a5;
+    color: var(--sp-white);
+    border: none;
+    border-radius: 8px;
+    padding: 13px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+    button[type="submit"]:hover {
+        background: var(--sp-orange-dark);
+    }
+
+    button[type="submit"]:active {
+        transform: translateY(1px);
+    }
+
+body > p:last-of-type {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+    body > p:last-of-type a {
+        color: #0055a5;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        body > p:last-of-type a:hover {
+            text-decoration: underline;
+        }
+
+@media (max-width: 480px) {
+    body > img {
+        width: 260px;
+        height: auto;
+    }
+
+    form {
+        padding: 24px 20px;
+    }
+}
