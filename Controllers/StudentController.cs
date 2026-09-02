@@ -20,5 +20,13 @@ namespace XISD6329_Task1_CRMS.Controllers
         {
             return View();
         }
+        public IActionResult MyBookings()
+        {
+            return View();
+        }
+        public IActionResult StudentProfile()
+        {
+            return View();
+        }
     }
 }

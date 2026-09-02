@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Bookings</title>
+
+    <link rel="stylesheet" href="~/css/MyBookings.css"/>
+
+</head>
+<body>
+
+    <div class="top-nav">
+        <button onclick="location.href='@Url.Action("StudentHome", "Student")'">
+            <p class="nav-back">Back</p>
+        </button>
+
+        <h2 class="nav-title">My Bookings</h2>
+
+        <button onclick="location.href='@Url.Action("StudentNotifications", "Student")'">
+            <p class="nav-notif">Notifications</p>
+        </button>
+    </div>
+
+    <h2>In Progress</h2>
+
+    <div>
+        <table>
+            <tr>
+                <th>Name</th>
+
+            </tr>
+            <tr>
+                <td>name</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>Completed</h2>
+
+    <div>
+        <table>
+            <tr>
+                <th>Name</th>
+
+            </tr>
+            <tr>
+                <td>name</td>
+            </tr>
+        </table>
+    </div>
+
+    <!--Link to Request Cleaning(the page that prmpts who the cleaning is for-->
+    <button onclick="location.href='@Url.Action("WhoCleaningIsFor", "Student")'">Request Cleaning</button>
+  
+
+</body>
+</html>
