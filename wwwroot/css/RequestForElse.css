@@ -1,0 +1,181 @@
+﻿:root {
+    --sp-orange: #f7941d; /* South Point primary brand orange (CTAs/accents) */
+    --sp-orange-dark: #d9770a; /* darker shade for hover/active states */
+    --sp-blue: #0055a5; /* South Point secondary brand blue */
+    --sp-blue-light: #e6f0fa; /* pale blue for backgrounds */
+    --sp-white: #ffffff;
+    --sp-grey-text: #4a4a4a;
+    --sp-grey-border: #d5dde5;
+    --sp-error: #d0342c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f5f5;
+    color: var(--sp-grey-text);
+    padding-bottom: 40px;
+}
+
+/*top nav bar: Back | Title | Notifications*/
+.top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--sp-orange);
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 8px rgba(0, 85, 165, 0.06);
+}
+
+    .top-nav button {
+        background: none;
+        border: none;
+        padding: 6px 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+        .top-nav button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+.nav-back,
+.nav-notif {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--sp-white);
+    font-weight: 600;
+}
+
+.nav-title {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--sp-white);
+    text-align: center;
+    flex: 1;
+}
+
+/*booking form, styled as a centered card*/
+form {
+    background: var(--sp-white);
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px 26px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 85, 165, 0.1);
+    border: 1px solid var(--sp-grey-border);
+}
+
+    form label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--sp-blue);
+        margin-bottom: -6px;
+    }
+
+    form select,
+    form input[type="date"],
+    form input[type="text"] {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 0.9rem;
+        font-family: inherit;
+        border: 1px solid var(--sp-grey-border);
+        border-radius: 8px;
+        background: var(--sp-white);
+        color: var(--sp-grey-text);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    form select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230055a5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        padding-right: 32px;
+        cursor: pointer;
+    }
+
+optgroup {
+    color: var(--sp-blue);
+    font-weight: 600;
+    font-style: normal;
+}
+
+option {
+    color: var(--sp-grey-text);
+}
+
+form select:focus,
+form input[type="date"]:focus,
+form input[type="text"]:focus {
+    outline: none;
+    border-color: var(--sp-orange);
+    box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.18);
+}
+
+/*override the inline width/height on the special instructions field*/
+form input[type="text"] {
+    width: 100% !important;
+    height: auto !important;
+    padding: 10px 12px;
+}
+
+form button[type="submit"] {
+    background: var(--sp-orange);
+    color: var(--sp-white);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+    form button[type="submit"]:hover {
+        background: var(--sp-orange-dark);
+    }
+
+    form button[type="submit"]:active {
+        transform: translateY(1px);
+    }
+
+/*bottom quick links: My Bookings / Profile*/
+body > a {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 10px;
+    color: var(--sp-blue);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+    body > a:hover {
+        text-decoration: underline;
+    }
+
+@media (max-width: 480px) {
+    form {
+        max-width: 90%;
+        padding: 22px 18px;
+    }
+}

@@ -1,0 +1,122 @@
+﻿:root {
+    --sp-orange: #f7941d; /* South Point primary brand orange (CTAs/accents) */
+    --sp-orange-dark: #d9770a; /* darker shade for hover/active states */
+    --sp-blue: #0055a5; /* South Point secondary brand blue */
+    --sp-blue-light: #e6f0fa; /* pale blue for backgrounds */
+    --sp-white: #ffffff;
+    --sp-grey-text: #4a4a4a;
+    --sp-grey-border: #d5dde5;
+    --sp-error: #d0342c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f5f5;
+    color: var(--sp-grey-text);
+}
+
+/*top nav bar: Back | Title | Notifications*/
+.top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--sp-orange);
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--sp-grey-border);
+    box-shadow: 0 2px 8px rgba(0, 85, 165, 0.06);
+}
+    /*strip default button chrome so Back/Notifications look like nav text, not buttons*/
+    .top-nav button {
+        background: none;
+        border: none;
+        padding: 6px 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+        .top-nav button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+.nav-back,
+.nav-notif {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--sp-white);
+    font-weight: 600;
+}
+
+.nav-title {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--sp-white);
+    text-align: center;
+    flex: 1;
+}
+
+/*section heading above the option cards*/
+.section-heading {
+    text-align: center;
+    color: var(--sp-blue);
+    font-size: 1.3rem;
+    margin: 32px 0 24px;
+}
+
+/*stacked selection cards*/
+.option-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 0 20px 40px;
+}
+
+.option-card {
+    background: var(--sp-white);
+    border-radius: 12px;
+    border: 1px solid var(--sp-grey-border);
+    box-shadow: 0 8px 24px rgba(0, 85, 165, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+    max-width: 280px;
+}
+
+    .option-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(0, 85, 165, 0.15);
+    }
+
+    .option-card button {
+        width: 100%;
+        min-height: 100px;
+        background: none;
+        border: none;
+        border-top: 4px solid var(--sp-orange);
+        border-radius: 12px;
+        padding: 20px 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .option-card button p {
+            margin: 0;
+            color: var(--sp-blue);
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+@media (max-width: 480px) {
+    .option-card {
+        max-width: 260px;
+    }
+}

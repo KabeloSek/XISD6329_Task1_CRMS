@@ -8,7 +8,15 @@ namespace XISD6329_Task1_CRMS.Controllers
         {
             return View();
         }
-        public IActionResult RequestCleaning()
+        public IActionResult WhoCleaningIsFor()
+        {
+            return View();
+        }
+        public IActionResult RequestCleaningForm()
+        {
+            return View();
+        }
+        public IActionResult RequestForElse()
         {
             return View();
         }

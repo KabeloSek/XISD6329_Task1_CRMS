@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design -->
+    <title>Request Cleaning</title>
+
+    <link rel="stylesheet" href="~/css/WhoItsFor.css" />
+</head>
+<body>
+
+    <!--Web pages navigation 'menu'-->
+    <div class="top-nav">
+        <button onclick="location.href='@Url.Action("StudentHome", "Student")'">
+            <p class="nav-back">Back</p>
+        </button>
+
+        <h2 class="nav-title">Request Cleaning</h2>
+
+        <button onclick="location.href='@Url.Action("StudentNotifications", "Student")'">
+            <p class="nav-notif">Notifications</p>
+        </button>
+    </div>
+
+    <h2 class="section-heading"> Who is This Booking For?</h2>
+
+    <div class="option-grid">
+        <div class="option-card">
+            <button onclick="location.href='@Url.Action("RequestCleaningForm", "Student")'">
+                <p>For Myself</p>
+            </button>
+        </div>
+
+        <div class="option-card">
+            <button onclick="location.href='@Url.Action("RequestForElse", "Student")'">
+                <p>Someone Else</p>
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>

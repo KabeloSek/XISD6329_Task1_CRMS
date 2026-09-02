@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Request For Someone Else</title>
+
+    <link rel="stylesheet" href="~/css/RequestForElse.css"/>
+
+</head>
+<body>
+
+    <div class="top-nav">
+        <button onclick="location.href='@Url.Action("StudentHome", "Student")'">
+            <p class="nav-back">Back</p>
+        </button>
+
+        <h2 class="nav-title">Request Cleaning</h2>
+
+        <button onclick="location.href='@Url.Action("StudentNotifications", "Student")'">
+            <p class="nav-notif">Notifications</p>
+        </button>
+    </div>
+
+    <form>
+
+        <label>Room Number</label>
+        <select>
+            <option value="">Choose Room Number</option>
+
+            <!-- Floor 1 -->
+            <optgroup label="Floor 1">
+                <option value="101">101</option>
+                <option value="102">102</option>
+                <option value="103">103</option>
+                <option value="104">104</option>
+                <option value="105">105</option>
+                <option value="106">106</option>
+                <option value="107">107</option>
+                <option value="108">108</option>
+                <option value="109">109</option>
+                <option value="110">110</option>
+            </optgroup>
+
+            <!-- Floor 2 -->
+            <optgroup label="Floor 2">
+                <option value="201">201</option>
+                <option value="202">202</option>
+                <option value="203">203</option>
+                <option value="204">204</option>
+                <option value="205">205</option>
+                <option value="206">206</option>
+                <option value="207">207</option>
+                <option value="208">208</option>
+                <option value="209">209</option>
+                <option value="210">210</option>
+            </optgroup>
+
+            <!-- Floor 3 -->
+            <optgroup label="Floor 3">
+                <option value="301">301</option>
+                <option value="302">302</option>
+                <option value="303">303</option>
+                <option value="304">304</option>
+                <option value="305">305</option>
+                <option value="306">306</option>
+                <option value="307">307</option>
+                <option value="308">308</option>
+                <option value="309">309</option>
+                <option value="310">310</option>
+            </optgroup>
+
+            <!-- Floor 4 -->
+            <optgroup label="Floor 4">
+                <option value="401">401</option>
+                <option value="402">402</option>
+                <option value="403">403</option>
+                <option value="404">404</option>
+                <option value="405">405</option>
+                <option value="406">406</option>
+                <option value="407">407</option>
+                <option value="408">408</option>
+                <option value="409">409</option>
+                <option value="410">410</option>
+            </optgroup>
+
+            <!-- Floor 5 -->
+            <optgroup label="Floor 5">
+                <option value="501">501</option>
+                <option value="502">502</option>
+                <option value="503">503</option>
+                <option value="504">504</option>
+                <option value="505">505</option>
+                <option value="506">506</option>
+                <option value="507">507</option>
+                <option value="508">508</option>
+                <option value="509">509</option>
+                <option value="510">510</option>
+            </optgroup>
+        </select>
+
+        <label>Select Date</label>
+        <input type="date" />
+
+        <label>Select Rooom Type</label>
+        <select>
+            <option value="Single">Single</option>
+            <option value="Sharing">Sharing</option>
+            <option value="Bachelor">Bachelor</option>
+
+        </select>
+
+        <label>Select Room Type</label>
+        <select>
+            <option value="8:30 AM - 10:00 PM">8:30 AM - 10:00 PM</option>
+            <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+            <option value="12:30 PM - 14:00 PM">12:30 PM - 14:00 PM</option>
+            <option value="14:00 PM - 16:00 PM">14:00 PM - 16:00 PM</option>
+        </select>
+
+        <label>Type of Cleaning</label>
+        <select>
+            <option value="Single">Regular</option>
+            <option value="Sharing">Deep</option>
+            <option value="Bachelor">Move-in/Move-out</option>
+
+        </select>
+
+        <label>Special Instructions (Optional)</label>
+        <input type="text" placeholder="E.g. Please vacuum carpert thoroughly" style="width: 250px; height: 30px;" />
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <a href="@Url.Action("MyBookings", "Student")">My Bookings</a>
+    <br />
+
+    <a href="@Url.Action("Profile", "Student")">Profile</a>
+
+</body>
+</html>
