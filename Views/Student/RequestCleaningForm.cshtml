@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Request For Someone Else</title>
 
+    <link rel="stylesheet" href="~/css/RequestForMe.css"/>
+
 </head>
 <body>
     <div class="top-nav">
@@ -21,39 +23,38 @@
 
     <form>
 
-        <label>Room Number</label><br />
+        <label>Room Number</label>
         <p>Room Number</p>
-        <br />
+        
 
-        <label>Select Date</label><br />
-        <input type="date" /><br />
+        <label>Select Date</label>
+        <input type="date" />
 
-        <label>Select Rooom Type</label><br />
+        <label>Select Rooom Type</label>
         <select>
             <option value="Single">Single</option>
             <option value="Sharing">Sharing</option>
             <option value="Bachelor">Bachelor</option>
 
-        </select><br />
+        </select>
 
-        <label>Select Room Type</label><br />
+        <label>Select Room Type</label>
         <select>
             <option value="8:30 AM - 10:00 PM">8:30 AM - 10:00 PM</option>
             <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
             <option value="12:30 PM - 14:00 PM">12:30 PM - 14:00 PM</option>
             <option value="14:00 PM - 16:00 PM">14:00 PM - 16:00 PM</option>
-        </select><br />
+        </select>
 
-        <label>Type of Cleaning</label><br />
+        <label>Type of Cleaning</label>
         <select>
             <option value="Single">Regular</option>
             <option value="Sharing">Deep</option>
             <option value="Bachelor">Move-in/Move-out</option>
+        </select>
 
-        </select><br />
-
-        <label>Special Instructions (Optional)</label><br />
-        <input type="text" placeholder="E.g. Please vacuum carpert thoroughly" style="width: 250px; height: 30px;" /><br />
+        <label>Special Instructions (Optional)</label>
+        <input type="text" placeholder="E.g. Please vacuum carpert thoroughly" style="width: 250px; height: 30px;" />
 
         <button type="submit">Submit</button>
     </form>
