@@ -1,31 +1,28 @@
-﻿<!DOCTYPE html>
+﻿@model XISD6329_Task1_CRMS.Models.CleaningRequestElseModel
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Request For Someone Else</title>
-
-    <link rel="stylesheet" href="~/css/RequestForElse.css"/>
-
+    <link rel="stylesheet" href="~/css/RequestForElse.css" />
 </head>
 <body>
-
     <div class="top-nav">
         <button onclick="location.href='@Url.Action("StudentHome", "Student")'">
             <p class="nav-back">Back</p>
         </button>
-
         <h2 class="nav-title">Request Cleaning</h2>
-
         <button onclick="location.href='@Url.Action("StudentNotifications", "Student")'">
             <p class="nav-notif">Notifications</p>
         </button>
     </div>
 
-    <form>
+    <form asp-action="RequestForElse" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
 
         <label>Room Number</label>
-        <select>
+        <select asp-for="roomNumber">
             <option value="">Choose Room Number</option>
 
             <!-- Floor 1 -->
@@ -98,41 +95,45 @@
                 <option value="510">510</option>
             </optgroup>
         </select>
+        <span asp-validation-for="roomNumber"></span>
 
         <label>Select Date</label>
-        <input type="date" />
+        <input type="date" asp-for="bookingDate" />
+        <span asp-validation-for="bookingDate"></span>
 
-        <label>Select Rooom Type</label>
-        <select>
+        <label>Select Room Type</label>
+        <select asp-for="roomType">
             <option value="Single">Single</option>
             <option value="Sharing">Sharing</option>
             <option value="Bachelor">Bachelor</option>
-
         </select>
+        <span asp-validation-for="roomType"></span>
 
-        <label>Select Room Type</label>
-        <select>
-            <option value="8:30 AM - 10:00 PM">8:30 AM - 10:00 PM</option>
+        <label>Select Time</label>
+        <select asp-for="timeSlot">
+            <option value="8:30 AM - 10:00 AM">8:30 AM - 10:00 AM</option>
             <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
-            <option value="12:30 PM - 14:00 PM">12:30 PM - 14:00 PM</option>
-            <option value="14:00 PM - 16:00 PM">14:00 PM - 16:00 PM</option>
+            <option value="12:30 PM - 2:00 PM">12:30 PM - 2:00 PM</option>
+            <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
         </select>
+        <span asp-validation-for="timeSlot"></span>
 
         <label>Type of Cleaning</label>
-        <select>
-            <option value="Single">Regular</option>
-            <option value="Sharing">Deep</option>
-            <option value="Bachelor">Move-in/Move-out</option>
-
+        <select asp-for="cleaningType">
+            <option value="Regular">Regular</option>
+            <option value="Deep">Deep</option>
+            <option value="Move-in/Move-out">Move-in/Move-out</option>
         </select>
+        <span asp-validation-for="cleaningType"></span>
 
         <label>Special Instructions (Optional)</label>
-        <input type="text" placeholder="E.g. Please vacuum carpert thoroughly" style="width: 250px; height: 30px;" />
+        <input type="text" asp-for="specialInstructions" placeholder="E.g. Please vacuum carpet thoroughly" />
+
+        <label>External Booking ID</label>
+        <input type="text" asp-for="externalBookingId" placeholder="Enter the student's External Booking ID (find it in their Profile) to validate this request" />
+        <span asp-validation-for="externalBookingId"></span>
 
         <button type="submit">Submit</button>
     </form>
-
-  
-
 </body>
 </html>

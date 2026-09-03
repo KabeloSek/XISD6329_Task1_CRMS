@@ -162,15 +162,17 @@ namespace XISD6329_Task1_CRMS.Models
                 using (SqlConnection connect = new SqlConnection(connection))
                 {
                     connect.Open();
-                    //Query to insert into CleaningStaff table
+
                     string insertIntoCleaningStaff = @"INSERT INTO CleaningStaff (Name, Email, Password)
-                                         VALUES
-                                            ('" + name + "','" + email + "','" + password + "');";
+                                                         VALUES
+                                                            ('" + name + "','" + email + "','" + password + "');";
+
                     using (SqlCommand insert = new SqlCommand(insertIntoCleaningStaff, connect))
                     {
                         insert.ExecuteNonQuery();
                         Console.WriteLine("Cleaning Staff data inserted successfully");
                     }
+
                     connect.Close();
                 }
             }
@@ -178,7 +180,8 @@ namespace XISD6329_Task1_CRMS.Models
             {
                 Console.WriteLine("Cleaning Staff could not be inserted into database" + error.Message);
             }
-        }//end of store cleaner
+        }//end of StoreCleaner
+
 
     }//end of RegisterModel class
 

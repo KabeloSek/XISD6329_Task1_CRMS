@@ -22,13 +22,81 @@ namespace XISD6329_Task1_CRMS.Controllers
         {
             return View();
         }
+        [HttpGet]
         public IActionResult RequestCleaningForm()
         {
-            return View();
+            int? studentId = HttpContext.Session.GetInt32("StudentID");
+            if (studentId == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            CleaningRequestModel model = new CleaningRequestModel
+            {
+                roomNumber = HttpContext.Session.GetString("StudentRoom")
+            };
+
+            return View(model);
         }
+
+        [HttpPost]
+        public IActionResult RequestCleaningForm(CleaningRequestModel booking)
+        {
+            int? studentId = HttpContext.Session.GetInt32("StudentID");
+            if (studentId == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if (ModelState.IsValid)
+            {
+                CleaningRequestModel request = new CleaningRequestModel();
+                request.StoreBooking(studentId.Value, booking.roomNumber, booking.bookingDate, booking.roomType, booking.timeSlot, booking.cleaningType, booking.specialInstructions);
+
+                return RedirectToAction("MyBookings", "Student");
+            }
+
+            return View(booking);
+        }
+        [HttpGet]
         public IActionResult RequestForElse()
         {
-            return View();
+            int? studentId = HttpContext.Session.GetInt32("StudentID");
+            if (studentId == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            return View(new CleaningRequestModel());
+        }
+
+        [HttpPost]
+        public IActionResult RequestForElse(CleaningRequestModel booking)
+        {
+            int? loggedInStudentId = HttpContext.Session.GetInt32("StudentID");
+            if (loggedInStudentId == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if (ModelState.IsValid)
+            {
+                CleaningRequestModel request = new CleaningRequestModel();
+
+                //validate the External Booking ID actually belongs to a real student
+                int? targetStudentId = request.FindStudentByExternalId(booking.externalBookingId);
+
+                if (targetStudentId == null)
+                {
+                    ModelState.AddModelError("externalBookingId", "That External Booking ID doesn't match any student.");
+                    return View(booking);
+                }
+
+                request.StoreBooking(targetStudentId.Value, booking.roomNumber, booking.bookingDate, booking.roomType, booking.timeSlot, booking.cleaningType, booking.specialInstructions);
+                return RedirectToAction("MyBookings", "Student");
+            }
+
+            return View(booking);
         }
         public IActionResult MyBookings()
         {

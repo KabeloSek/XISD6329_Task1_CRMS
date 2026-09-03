@@ -16,10 +16,13 @@ namespace XISD6329_Task1_CRMS.Models
         //declaration of global connectionString variable
         private string connection = @"Server=(localdb)\south_point_system;Database=southpoint_database;";
 
-        public bool StudentLogin(string email, string password, out string studentName)
+        public bool StudentLogin(string email, string password, out string studentName, out int studentId, out string studentRoom)
         {
             bool found = false;
             studentName = "";
+            studentId = 0;
+            studentRoom = "";
+
             try
             {
                 using (SqlConnection connect = new SqlConnection(connection))
@@ -39,6 +42,8 @@ namespace XISD6329_Task1_CRMS.Models
                             {
                                 found = true;
                                 studentName = reader["Name"].ToString();
+                                studentId = (int)reader["StudentID"];
+                                studentRoom = reader["Room"].ToString();
                             }
                         }
                     }
@@ -52,8 +57,39 @@ namespace XISD6329_Task1_CRMS.Models
             }
 
             return found;
-        }//end of StudentLogin method
+        }
 
-
+        public bool CleanerLogin(string email, string password, out string cleanerName)
+        {
+            bool found = false;
+            cleanerName = "";
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(connection))
+                {
+                    connect.Open();
+                    string query = @"SELECT * FROM Cleaner WHERE Email=@Email AND Password=@Password";
+                    using (SqlCommand command = new SqlCommand(query, connect))
+                    {
+                        command.Parameters.AddWithValue("@Email", email);
+                        command.Parameters.AddWithValue("@Password", password);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                found = true;
+                                cleanerName = reader["Name"].ToString();
+                            }
+                        }
+                    }
+                    connect.Close();
+                }
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine("Error during cleaner login: " + error.Message);
+            }
+            return found;
+        }//end of CleanerLogin method
     }//end of LoginModel class
 }
