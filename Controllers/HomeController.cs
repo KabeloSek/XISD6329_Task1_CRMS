@@ -62,7 +62,7 @@ namespace XISD6329_Task1_CRMS.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid email or password.");
+                    Console.WriteLine("Login failed for email ");
                 }
             }
             return View(user);

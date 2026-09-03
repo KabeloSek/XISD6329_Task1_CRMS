@@ -21,7 +21,6 @@ body {
     color: var(--sp-grey-text);
     padding-bottom: 40px;
 }
-
 /*top nav bar: Back | Title | Notifications*/
 .top-nav {
     display: grid;
@@ -71,8 +70,20 @@ body {
     white-space: nowrap;
 }
 
+/*profile status message (e.g. "Profile updated successfully")*/
+.profile-message {
+    max-width: 380px;
+    margin: 0 auto 16px;
+    padding: 10px 14px;
+    text-align: center;
+    background: var(--sp-blue-light);
+    color: var(--sp-blue);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
 /*profile detail fields: label + value box, centered card-width*/
-body > h3 {
+form > h3 {
     color: var(--sp-blue);
     font-size: 0.95rem;
     margin: 0 auto 6px;
@@ -81,13 +92,13 @@ body > h3 {
     text-align: center;
 }
 
-body > div:not(.top-nav) {
+form > div:not(.field-row):not(.change-password-section) {
     max-width: 380px;
     margin: 0 auto 20px;
     padding: 0 20px;
 }
 
-    body > div:not(.top-nav) p {
+    form > div:not(.field-row):not(.change-password-section) p {
         margin: 0;
         padding: 12px 14px;
         background: var(--sp-white);
@@ -99,8 +110,127 @@ body > div:not(.top-nav) {
         text-align: center;
     }
 
-/*logout button*/
-body > button[type="submit"] {
+form > span.field-validation-error {
+    display: block;
+    max-width: 380px;
+    margin: -2px auto 12px;
+    padding: 0 20px;
+    color: var(--sp-error);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+/*email/password row: input + inline action link (Change Email / Show)*/
+.field-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 380px;
+    margin: 0 auto 4px;
+    padding: 0 20px;
+}
+
+    .field-row input {
+        flex: 1;
+        padding: 12px 14px;
+        border: 1px solid var(--sp-grey-border);
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: var(--sp-grey-text);
+        background: var(--sp-white);
+    }
+
+        .field-row input[readonly] {
+            background: var(--sp-blue-light);
+            color: var(--sp-grey-text);
+        }
+
+        .field-row input:not([readonly]):focus {
+            outline: none;
+            border-color: var(--sp-orange);
+            box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.18);
+        }
+
+.link-btn {
+    background: none;
+    border: none;
+    color: var(--sp-orange);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 6px;
+    white-space: nowrap;
+}
+
+    .link-btn:hover {
+        text-decoration: underline;
+    }
+
+    .link-btn.small {
+        display: block;
+        margin: 0 auto 16px;
+        max-width: 380px;
+        text-align: left;
+        padding-left: 20px;
+        font-size: 0.8rem;
+    }
+
+/*hidden-by-default section revealed by "Change Password"*/
+.change-password-section {
+    max-width: 380px;
+    margin: 0 auto 16px;
+    padding: 14px 20px;
+    background: var(--sp-blue-light);
+    border-radius: 8px;
+}
+
+    .change-password-section h4 {
+        margin: 0 0 4px;
+        font-size: 0.85rem;
+        color: var(--sp-blue);
+    }
+
+    .change-password-section input {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 10px;
+        border: 1px solid var(--sp-grey-border);
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+        .change-password-section input:focus {
+            outline: none;
+            border-color: var(--sp-orange);
+            box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.18);
+        }
+
+/*Save Changes button (inside the profile form)*/
+.save-btn {
+    display: block;
+    margin: 12px auto 0;
+    background: var(--sp-orange);
+    color: var(--sp-white);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+    .save-btn:hover {
+        background: var(--sp-orange-dark);
+    }
+
+    .save-btn:active {
+        transform: translateY(1px);
+    }
+
+/*logout button (its own separate form)*/
+form > button[type="submit"]:not(.save-btn) {
     display: block;
     margin: 20px auto 0;
     background: var(--sp-orange);
@@ -115,10 +245,10 @@ body > button[type="submit"] {
     transition: background 0.2s ease, transform 0.1s ease;
 }
 
-    body > button[type="submit"]:hover {
+    form > button[type="submit"]:not(.save-btn):hover {
         background: var(--sp-orange-dark);
     }
 
-    body > button[type="submit"]:active {
+    form > button[type="submit"]:not(.save-btn):active {
         transform: translateY(1px);
     }
