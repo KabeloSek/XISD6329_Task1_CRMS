@@ -98,9 +98,25 @@ namespace XISD6329_Task1_CRMS.Controllers
 
             return View(booking);
         }
+        [HttpGet]
         public IActionResult MyBookings()
         {
-            return View();
+            int? studentId = HttpContext.Session.GetInt32("StudentID");
+            if (studentId == null) return RedirectToAction("Login", "Home");
+
+            CleanerModel model = new CleanerModel();
+            List<BookingViewModel> bookings = model.GetStudentBookings(studentId.Value);
+            return View(bookings);
+        }
+        [HttpGet]
+        public IActionResult StudentNotifications()
+        {
+            int? studentId = HttpContext.Session.GetInt32("StudentID");
+            if (studentId == null) return RedirectToAction("Login", "Home");
+
+            NotificationModel model = new NotificationModel();
+            List<NotificationViewModel> notifications = model.GetNotifications(studentId.Value);
+            return View(notifications);
         }
         [HttpGet]
         public IActionResult StudentProfile()

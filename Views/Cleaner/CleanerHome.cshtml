@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cleaner Dashboard</title>
+    <link rel="stylesheet" href="~/css/StudentDashboard.css" />
+</head>
+<body>
+    <header class="dashboard-header">
+        <h1>Hello @Context.Session.GetString("CleanerName")</h1>
+        <p>What would you like to do today</p>
+    </header>
+    <div class="card-grid">
+        <div class="card">
+            <button onclick="location.href='@Url.Action("CleanerRequests", "Cleaner")'">
+                <p class="card-title"><b>Cleaning Requests</b></p>
+                <p class="card-subtitle">See open requests</p>
+            </button>
+        </div>
+        <div class="card">
+            <button onclick="location.href='@Url.Action("CleanerBookings", "Cleaner")'">
+                <p class="card-title"><b>My Bookings</b></p>
+                <p class="card-subtitle">Jobs you've accepted</p>
+            </button>
+        </div>
+        <div class="card">
+            <button onclick="location.href='@Url.Action("CleanerProfile", "Cleaner")'">
+                <p class="card-title"><b>Profile</b></p>
+                <p class="card-subtitle">Manage your profile</p>
+            </button>
+        </div>
+    </div>
+</body>
+</html>

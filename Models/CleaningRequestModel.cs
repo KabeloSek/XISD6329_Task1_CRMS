@@ -37,10 +37,15 @@ namespace XISD6329_Task1_CRMS.Models
                 {
                     connect.Open();
 
-                    string insertIntoBooking = @"INSERT INTO Booking (StudentID, RoomNumber, BookingDate, RoomType, TimeSlot, CleaningType, SpecialInstructions)
-                                                  VALUES
-                                                  (@StudentID, @RoomNumber, @BookingDate, @RoomType, @TimeSlot, @CleaningType, @SpecialInstructions)";
+                    //generate a unique passkey the student will give the cleaner to confirm completion
+                    string passkey = GenerateUniquePasskey(connect);
 
+                    string insertIntoBooking = @"INSERT INTO Booking (StudentID, RoomNumber, BookingDate, RoomType, TimeSlot, CleaningType, SpecialInstructions, Status, Passkey)
+                                                  OUTPUT INSERTED.BookingID
+                                                  VALUES
+                                                  (@StudentID, @RoomNumber, @BookingDate, @RoomType, @TimeSlot, @CleaningType, @SpecialInstructions, 'Pending', @Passkey)";
+
+                    int bookingId;
                     using (SqlCommand insert = new SqlCommand(insertIntoBooking, connect))
                     {
                         insert.Parameters.AddWithValue("@StudentID", studentId);
@@ -50,9 +55,24 @@ namespace XISD6329_Task1_CRMS.Models
                         insert.Parameters.AddWithValue("@TimeSlot", timeSlot);
                         insert.Parameters.AddWithValue("@CleaningType", cleaningType);
                         insert.Parameters.AddWithValue("@SpecialInstructions", (object)specialInstructions ?? DBNull.Value);
+                        insert.Parameters.AddWithValue("@Passkey", passkey);
 
-                        insert.ExecuteNonQuery();
-                        Console.WriteLine("Booking inserted successfully");
+                        bookingId = (int)insert.ExecuteScalar();
+                    }
+
+                    //notify the student immediately with their passkey, so they have it ready for the cleaner
+                    string insertNotification = @"INSERT INTO Notification (StudentID, Message, NotificationType, BookingID, Passkey, BookingDate, CreatedAt)
+                                                   VALUES
+                                                   (@StudentID, @Message, 'Requested', @BookingID, @Passkey, @BookingDate, GETDATE())";
+
+                    using (SqlCommand notify = new SqlCommand(insertNotification, connect))
+                    {
+                        notify.Parameters.AddWithValue("@StudentID", studentId);
+                        notify.Parameters.AddWithValue("@Message", "Your cleaning request has been submitted. Give this passkey to your cleaner once the job is done.");
+                        notify.Parameters.AddWithValue("@BookingID", bookingId);
+                        notify.Parameters.AddWithValue("@Passkey", passkey);
+                        notify.Parameters.AddWithValue("@BookingDate", bookingDate);
+                        notify.ExecuteNonQuery();
                     }
 
                     connect.Close();
@@ -63,6 +83,28 @@ namespace XISD6329_Task1_CRMS.Models
                 Console.WriteLine("Booking could not be inserted: " + error.Message);
             }
         }//end StoreBooking
+
+        //keeps generating until it finds one not already used — passkeys are short, so collisions are possible
+        private string GenerateUniquePasskey(SqlConnection connect)
+        {
+            string passkey;
+            bool exists;
+
+            do
+            {
+                passkey = new Random().Next(100000, 999999).ToString();
+
+                string checkQuery = @"SELECT COUNT(*) FROM Booking WHERE Passkey=@Passkey";
+                using (SqlCommand check = new SqlCommand(checkQuery, connect))
+                {
+                    check.Parameters.AddWithValue("@Passkey", passkey);
+                    exists = (int)check.ExecuteScalar() > 0;
+                }
+            } while (exists);
+
+            return passkey;
+        }//end GenerateUniquePasskey
+
 
         //finds the StudentID belonging to the given ExternalBookingID, so the booking is
         //recorded against the actual student it's for, not whoever is logged in

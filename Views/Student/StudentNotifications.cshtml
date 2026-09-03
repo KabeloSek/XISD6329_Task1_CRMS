@@ -1,0 +1,46 @@
+﻿@model List<XISD6329_Task1_CRMS.Models.NotificationViewModel>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications</title>
+    <link rel="stylesheet" href="~/css/MyBookings.css" />
+</head>
+<body>
+    <div class="top-nav">
+        <button onclick="location.href='@Url.Action("StudentHome", "Student")'">
+            <p class="nav-back">Back</p>
+        </button>
+        <h2 class="nav-title">Notifications</h2>
+        <button onclick="location.href='@Url.Action("MyBookings", "Student")'">
+            <p class="nav-notif">Bookings</p>
+        </button>
+    </div>
+
+    <div class="booking-list">
+        @foreach (var note in Model)
+        {
+            <div class="booking-card">
+                <p>@note.message</p>
+                @if (!string.IsNullOrEmpty(note.cleanerName))
+                {
+                    <p class="booking-cleaner">Cleaner: @note.cleanerName</p>
+                }
+                @if (note.bookingDate != null)
+                {
+                    <p>Date: @note.bookingDate.Value.ToString("dd MMM yyyy")</p>
+                }
+                @if (!string.IsNullOrEmpty(note.passkey))
+                {
+                    <p class="booking-cleaner">Passkey: @note.passkey</p>
+                }
+            </div>
+        }
+        @if (!Model.Any())
+        {
+            <p class="empty-state">No notifications yet.</p>
+        }
+    </div>
+</body>
+</html>

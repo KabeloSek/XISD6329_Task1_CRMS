@@ -1,0 +1,92 @@
+﻿@model XISD6329_Task1_CRMS.Models.CleanerProfileModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="~/css/CleanerProfile.css" />
+</head>
+<body>
+    <div class="top-nav">
+        <button onclick="location.href='@Url.Action("CleanerHome", "Cleaner")'">
+            <p class="nav-back">Back</p>
+        </button>
+        <h2 class="nav-title">Profile</h2>
+    </div>
+
+    @if (ViewBag.Message != null)
+    {
+        <p class="profile-message">@ViewBag.Message</p>
+    }
+
+    <form asp-action="CleanerProfile" method="post">
+
+        <!--EMAIL: read-only display, click "Change Email" to edit-->
+        <h3>Email</h3>
+        <div class="field-row">
+            <input type="email" asp-for="email" id="emailInput" readonly />
+            <button type="button" class="link-btn" onclick="toggleEmailEdit()">Change Email</button>
+        </div>
+        <span asp-validation-for="email"></span>
+
+        <!--PASSWORD: starred by default, toggle to reveal-->
+        <h3>Password</h3>
+        <div class="field-row">
+            <input type="password" asp-for="password" id="passwordInput" readonly />
+            <button type="button" class="link-btn" id="toggleStarBtn" onclick="togglePasswordVisibility()">Show</button>
+        </div>
+        <button type="button" class="link-btn small" onclick="toggleChangePassword()">Change Password</button>
+
+        <div id="changePasswordSection" class="change-password-section" style="display:none;">
+            <h4>New Password</h4>
+            <input type="password" asp-for="newPassword" placeholder="Enter new password" />
+
+            <h4>Confirm New Password</h4>
+            <input type="password" asp-for="confirmNewPassword" placeholder="Confirm new password" />
+            <span asp-validation-for="confirmNewPassword"></span>
+        </div>
+
+        <button type="submit" class="save-btn">Save Changes</button>
+    </form>
+
+    <form asp-controller="Home" asp-action="LogoutCleaner" method="post">
+        <button type="submit">Logout</button>
+    </form>
+
+    <script>
+        function toggleEmailEdit() {
+            const input = document.getElementById("emailInput");
+            const btn = event.target;
+            const isReadonly = input.hasAttribute("readonly");
+
+            if (isReadonly) {
+                input.removeAttribute("readonly");
+                input.focus();
+                btn.textContent = "Cancel";
+            } else {
+                input.setAttribute("readonly", true);
+                btn.textContent = "Change Email";
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById("passwordInput");
+            const btn = document.getElementById("toggleStarBtn");
+
+            if (input.type === "password") {
+                input.type = "text";
+                btn.textContent = "Hide";
+            } else {
+                input.type = "password";
+                btn.textContent = "Show";
+            }
+        }
+
+        function toggleChangePassword() {
+            const section = document.getElementById("changePasswordSection");
+            section.style.display = (section.style.display === "none") ? "block" : "none";
+        }
+    </script>
+</body>
+</html>

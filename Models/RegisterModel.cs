@@ -44,7 +44,7 @@ namespace XISD6329_Task1_CRMS.Models
                     string StudentTable = @"IF OBJECT_ID('dbo.Student','U') IS NULL
                                             BEGIN
                                                 CREATE TABLE Student (
-                                                StudentID INT PRIMARY KEY IDENTITY (1,1),
+                                                StudentID INT PRIMARY KEY IDENTITY(1,1),
                                                 Room VARCHAR(10) NOT NULL,
                                                 Name VARCHAR(50) NOT NULL,
                                                 Email VARCHAR(100) NOT NULL UNIQUE,
@@ -58,25 +58,34 @@ namespace XISD6329_Task1_CRMS.Models
                                                 CREATE TABLE Booking(
                                                 BookingID INT PRIMARY KEY IDENTITY(1,1),
                                                 StudentID INT NOT NULL,
+                                                CleanerID INT NULL,
                                                 RoomNumber VARCHAR(10) NOT NULL,
                                                 BookingDate DATE NOT NULL,
                                                 RoomType VARCHAR(20) NOT NULL,
                                                 TimeSlot VARCHAR(45) NOT NULL,
                                                 CleaningType VARCHAR(30) NOT NULL,
                                                 SpecialInstructions VARCHAR(250) NULL,
-                                                Status  VARCHAR(20) NOT NULL DEFAULT 'In Progress',
-                                                FOREIGN KEY (StudentID) REFERENCES Student(StudentID)
+                                                Status VARCHAR(20) NOT NULL DEFAULT 'Pending',
+                                                Passkey VARCHAR(10) NULL UNIQUE,
+                                                FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
+                                                FOREIGN KEY (CleanerID) REFERENCES CleaningStaff(StaffID)
                                                 );
                                             END";
                     //SQL command to create the notification table
                     string NotificationTable = @"IF OBJECT_ID('dbo.Notification','U') IS NULL
                                                 BEGIN
-                                                    CREATE TABLE Notification(
+                                                    CREATE TABLE Notification (
                                                     NotificationID INT PRIMARY KEY IDENTITY(1,1),
                                                     StudentID INT NOT NULL,
+                                                    BookingID INT NULL,
                                                     Message VARCHAR(250) NOT NULL,
+                                                    NotificationType VARCHAR(20) NULL,   -- 'Requested' | 'Accepted' | 'Completed'
+                                                    CleanerName VARCHAR(50) NULL,
+                                                    Passkey VARCHAR(10) NULL,
+                                                    BookingDate DATE NULL,
                                                     CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
-                                                    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)
+                                                    FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
+                                                    FOREIGN KEY (BookingID) REFERENCES Booking(BookingID)
                                                     );
                                                 END";
 
@@ -87,15 +96,22 @@ namespace XISD6329_Task1_CRMS.Models
                                                     StaffID INT PRIMARY KEY IDENTITY(1,1),
                                                     Name VARCHAR(100) NOT NULL,
                                                     Email VARCHAR(100) NOT NULL UNIQUE,
-                                                    Password VARCHAR(75) NOT NULL,
+                                                    Password VARCHAR(75) NOT NULL
                                                     );
                                                 END";
+
+                    
 
                     //using the 'using function to execute create queries
                     using (SqlCommand createStudentTable = new SqlCommand(StudentTable, connect))
                     {
                         createStudentTable.ExecuteNonQuery();
                         Console.WriteLine("Student table created successfully");
+                    }
+                    using (SqlCommand createCleaningStaffTable = new SqlCommand(CleaningStaffTable, connect))
+                    {
+                        createCleaningStaffTable.ExecuteNonQuery();
+                        Console.WriteLine("CleaningStaff table created successfully");
                     }
                     using (SqlCommand createBookingTable = new SqlCommand(BookingTable, connect))
                     {
@@ -107,11 +123,8 @@ namespace XISD6329_Task1_CRMS.Models
                         createNotificationTable.ExecuteNonQuery();
                         Console.WriteLine("Notification table created successfully");
                     }
-                    using (SqlCommand createCleaningStaffTable = new SqlCommand(CleaningStaffTable, connect))
-                    {
-                        createCleaningStaffTable.ExecuteNonQuery();
-                        Console.WriteLine("CleaningStaff table created successfully");
-                    }
+                   
+                  
                     connect.Close();
 
                 }//end of using connection statement

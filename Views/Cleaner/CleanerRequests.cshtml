@@ -1,0 +1,39 @@
+﻿@model List<XISD6329_Task1_CRMS.Models.BookingViewModel>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Cleaning Requests</title>
+    <link rel="stylesheet" href="~/css/MyBookings.css" />
+</head>
+<body>
+    <div class="top-nav">
+        <button onclick="location.href='@Url.Action("CleanerHome", "Cleaner")'">
+            <p class="nav-back">Back</p>
+        </button>
+        <h2 class="nav-title">Open Requests</h2>
+    </div>
+
+    <div class="booking-list">
+        @foreach (var booking in Model)
+        {
+            <div class="booking-card">
+                <p class="booking-room">Room @booking.roomNumber</p>
+                <p>@booking.bookingDate.ToString("dd MMM yyyy") · @booking.timeSlot</p>
+                <p>@booking.cleaningType Cleaning (@booking.roomType)</p>
+                @if (!string.IsNullOrEmpty(booking.specialInstructions))
+                {
+                    <p>"@booking.specialInstructions"</p>
+                }
+                <form asp-controller="Cleaner" asp-action="AcceptBooking" method="post">
+                    <input type="hidden" name="bookingId" value="@booking.bookingId" />
+                    <button type="submit" class="save-btn">Accept</button>
+                </form>
+            </div>
+        }
+        @if (!Model.Any())
+        {
+            <p class="empty-state">No open requests right now.</p>
+        }
+    </div>
+</body>
+</html>
