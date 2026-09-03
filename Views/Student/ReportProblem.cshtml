@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report a Problem</title>
+</head>
+
+<body>
+
+    <h1>Report a Problem</h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <p>@TempData["SuccessMessage"]</p>
+    }
+
+    <form method="post" enctype="multipart/form-data">
+
+        <div>
+            <label>Describe the issue:</label>
+
+            <textarea name="Issue"
+                      placeholder="Describe the problem you are experiencing"></textarea>
+
+         
+        </div>
+
+        <div>
+            <label>Select Room Number:</label>
+
+            <select name="Room">
+                <option value="">Choose Room Number</option>
+
+                <option value="101">101</option>
+                <option value="102">102</option>
+                <option value="103">103</option>
+
+                <!-- Add the rest of your rooms here -->
+
+            </select>
+
+            
+        </div>
+
+        <div>
+            <label>Upload Photo:</label>
+
+            <input type="file"
+                   name="Photo"
+                   accept="image/*">
+
+            
+        </div>
+
+        <button type="submit">Submit Report</button>
+
+    </form>
+
+</body>
+</html>

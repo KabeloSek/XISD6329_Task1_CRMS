@@ -51,5 +51,33 @@
         Logout
     </button>
 
+    <!-- Help & Support section added -->
+    <div class="help-support-container">
+
+        <h1>Help & Support</h1>
+
+        <div class="help-section">
+            <h2>FAQs</h2>
+
+            <button onclick="location.href='@Url.Action("CleaningGuidelines", "Student")'">
+                Cleaning Guidelines
+            </button>
+
+            <button onclick="location.href='@Url.Action("ContactResidenceManagement", "Student")'">
+                Contact Residence Management
+            </button>
+        </div>
+
+        <div class="help-section">
+            <h2>Report a Problem</h2>
+
+            <p>If you are experiencing a problem, you can click on the report button below.</p>
+
+            <button onclick="location.href='@Url.Action("ReportProblem", "Student")'">
+                Report a Problem
+            </button>
+        </div>
+
+    </div>
 </body>
 </html>
