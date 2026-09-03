@@ -16,44 +16,41 @@ namespace XISD6329_Task1_CRMS.Models
         //declaration of global connectionString variable
         private string connection = @"Server=(localdb)\south_point_system;Database=southpoint_database;";
 
-        public bool StudentLogin(string email, string password)
+        public bool StudentLogin(string email, string password, out string studentName)
         {
             bool found = false;
+            studentName = "";
             try
             {
                 using (SqlConnection connect = new SqlConnection(connection))
                 {
                     connect.Open();
 
-                    string query = @"SELECT * FROM Student WHERE Email = '" +email+ "' AND Password = '" +password+ "';";
+                    string query = @"SELECT * FROM Student WHERE Email=@Email AND Password=@Password";
 
-                    try
+                    using (SqlCommand command = new SqlCommand(query, connect))
                     {
-                        using (SqlCommand search = new SqlCommand(query, connect))
+                        command.Parameters.AddWithValue("@Email", email);
+                        command.Parameters.AddWithValue("@Password", password);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            using (SqlDataReader reader = search.ExecuteReader())
+                            if (reader.Read())
                             {
-                                while (reader.Read())
-                                {
-                                    found = true;
-                                    Console.WriteLine("User found: " + reader["Name"].ToString());
-                                }
-
-                            }//end of using statement for SqlDataReader
-                        }//end of using statement for SqlCommand
-
+                                found = true;
+                                studentName = reader["Name"].ToString();
+                            }
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error searching for student: " + ex.Message);
-                    }
-                   
-                }//end of using statement for connection
+
+                    connect.Close();
+                }
             }
             catch (Exception error)
             {
-                Console.WriteLine("User not found: " + error.Message);
+                Console.WriteLine("Error during student login: " + error.Message);
             }
+
             return found;
         }//end of StudentLogin method
 

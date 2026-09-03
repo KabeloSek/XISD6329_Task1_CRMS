@@ -6,6 +6,15 @@ namespace XISD6329_Task1_CRMS.Controllers
     {
         public IActionResult StudentHome()
         {
+            string studentName = HttpContext.Session.GetString("StudentName");
+
+            //if there's no session, they never logged in — send them back
+            if (string.IsNullOrEmpty(studentName))
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            ViewBag.StudentName = studentName;
             return View();
         }
         public IActionResult WhoCleaningIsFor()
@@ -31,6 +40,11 @@ namespace XISD6329_Task1_CRMS.Controllers
         public IActionResult StudentHelpSupport()
         {
             return View();
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "Home");
         }
     }
 }

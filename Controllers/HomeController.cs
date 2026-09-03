@@ -50,10 +50,14 @@ namespace XISD6329_Task1_CRMS.Controllers
             if (ModelState.IsValid)
             {
                 LoginModel login = new LoginModel();
-                bool found = login.StudentLogin(user.email, user.password);
+                bool found = login.StudentLogin(user.email, user.password, out string studentName);
 
                 if (found)
                 {
+                    //store the logged-in student's name for this session
+                    HttpContext.Session.SetString("StudentName", studentName);
+                    HttpContext.Session.SetString("StudentEmail", user.email);
+
                     return RedirectToAction("StudentHome", "Student");
                 }
                 else
