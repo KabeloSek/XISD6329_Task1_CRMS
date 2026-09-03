@@ -28,5 +28,9 @@ namespace XISD6329_Task1_CRMS.Controllers
         {
             return View();
         }
+        public IActionResult StudentHelpSupport()
+        {
+            return View();
+        }
     }
 }
