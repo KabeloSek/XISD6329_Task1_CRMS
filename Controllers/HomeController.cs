@@ -76,17 +76,16 @@ namespace XISD6329_Task1_CRMS.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterCleaner(RegisterModel cleaner)
+        public IActionResult RegisterCleaner(CleanerRegisterModel cleaner)
         {
             if (ModelState.IsValid)
             {
-                RegisterModel register = new RegisterModel();
+                CleanerRegisterModel register = new CleanerRegisterModel();
                 register.StoreCleaner(cleaner.name, cleaner.email, cleaner.password);
                 return RedirectToAction("LoginCleaner", "Home");
             }
             return View(cleaner);
         }
-
         [HttpGet]
         public IActionResult LoginCleaner()
         {
@@ -99,19 +98,19 @@ namespace XISD6329_Task1_CRMS.Controllers
             if (ModelState.IsValid)
             {
                 LoginModel login = new LoginModel();
-                bool found = login.CleanerLogin(cleaner.email, cleaner.password, out string cleanerName);
+                bool found = login.CleanerLogin(cleaner.email, cleaner.password, out string cleanerName, out int cleanerId);
 
                 if (found)
                 {
-                    //store the logged-in cleaner's name for this session
                     HttpContext.Session.SetString("CleanerName", cleanerName);
                     HttpContext.Session.SetString("CleanerEmail", cleaner.email);
+                    HttpContext.Session.SetInt32("CleanerID", cleanerId);
 
                     return RedirectToAction("CleanerHome", "Cleaner");
                 }
                 else
                 {
-                    Console.WriteLine("Login failed for email ");
+                    ModelState.AddModelError("", "Invalid email or password.");
                 }
             }
             return View(cleaner);

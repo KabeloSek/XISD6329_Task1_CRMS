@@ -15,18 +15,16 @@
     <h1>Welcome Back!</h1>
     <p>Enter the required details to Login</p>
 
-    <form asp-action="Login" method="get">
+    <form asp-action="LoginCleaner" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
 
         <!--input EMAIL-->
         <input type="email" asp-for="email" placeholder="Email (e.g., johndoe@gmail.com)" />
-        <span asp-validation-for="email"/>
-
+        <span asp-validation-for="email"></span>
         <!--input PASSWORD-->
         <input type="password" asp-for="password" placeholder="Password" />
-        <span asp-validation-for="password" />
-
+        <span asp-validation-for="password"></span>
         <button type="submit">Login</button>
-
     </form>
     <p>Haven't' Registered? <a href="@Url.Action("RegisterCleaner", "Home")">Register</a> </p>
 

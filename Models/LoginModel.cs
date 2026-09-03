@@ -57,18 +57,19 @@ namespace XISD6329_Task1_CRMS.Models
             }
 
             return found;
-        }
+        }//end of StudentLogin method
 
-        public bool CleanerLogin(string email, string password, out string cleanerName)
+        public bool CleanerLogin(string email, string password, out string cleanerName, out int cleanerId)
         {
             bool found = false;
             cleanerName = "";
+            cleanerId = 0;
             try
             {
                 using (SqlConnection connect = new SqlConnection(connection))
                 {
                     connect.Open();
-                    string query = @"SELECT * FROM Cleaner WHERE Email=@Email AND Password=@Password";
+                    string query = @"SELECT * FROM CleaningStaff WHERE Email=@Email AND Password=@Password";
                     using (SqlCommand command = new SqlCommand(query, connect))
                     {
                         command.Parameters.AddWithValue("@Email", email);
@@ -79,6 +80,7 @@ namespace XISD6329_Task1_CRMS.Models
                             {
                                 found = true;
                                 cleanerName = reader["Name"].ToString();
+                                cleanerId = (int)reader["StaffID"];
                             }
                         }
                     }
