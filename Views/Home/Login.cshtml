@@ -1,33 +1,30 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
+﻿@model XISD6329_Task1_CRMS.Models.LoginModel
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design -->
-    <title>Login</title>
+<link rel="stylesheet" href="~/css/Login.css" />
 
-    <link rel="stylesheet" href="~/css/Login.css"/>
-</head>
-<body>
+<div class="wel-Back">
+    <h1>Welcome Back</h1>
+    <p>Please login to continue</p>
+</div>
 
-    <img src="/images/SouthPointLogo(1).png" width="400" height="250" alt="Site Logo" />
-    <h1>Welcome Back!</h1>
-    <p>Enter the required details to Login</p>
+<form asp-action="Login" method="post" class="form-container">
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-    <form asp-action="Login" method="get">
+    <div class="form-group">
+        <label>Email:</label><br />
+        <input type="email" asp-for="email" placeholder="Enter email" />
+        <span asp-validation-for="email"></span>
+    </div>
 
-        <!--input EMAIL-->
-        <input type="email" id="email" placeholder="Email (e.g., johndoe@gmail.com)" />
+    <div class="form-group">
+        <label>Password:</label><br />
+        <input type="password" asp-for="password" placeholder="Enter password" />
+        <span asp-validation-for="password"></span>
+    </div>
 
-        <!--input PASSWORD-->
-        <input type="password" id="password" placeholder="Password" />
+    <button type="submit" class="btn">Login</button>
+</form>
 
-        <button type="submit">Login</button>
-
-    </form>
-    <p>Haven't' Registered? <a href="@Url.Action("Register", "Home")">Register</a> </p>
-
-    <p><a href="@Url.Action("LoginCleaner", "Home")">Login as Cleaner</a></p>
-
-</body>
-</html>
+<div class="register-prompt">
+    <p>Don't have an account? <a href="@Url.Action("Register", "Home")">Register</a></p>
+</div>

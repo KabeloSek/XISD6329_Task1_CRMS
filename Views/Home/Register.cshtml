@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model XISD6329_Task1_CRMS.Models.RegisterModel
+<!DOCTYPE html>
 <html lang="en">
 <head>
  
@@ -17,7 +18,7 @@
         <form asp-action="Register" method="post">
             
             <!-- drop down for choosing rooms-->
-            <select id="room" name="room" required>
+            <select asp-for="room">
                 <option value="">Choose Room Number</option>
 
                     <!-- Floor 1 -->
@@ -90,18 +91,24 @@
                         <option value="510">510</option>
                     </optgroup>
             </select>
+            <span asp-validation-for="room"/>
 
             <!--input NAME-->
-            <input type="text" id="name" placeholder="Name (e.g., John)"/>
+            <input type="text" asp-for="name" placeholder="Name (e.g., John)"/>
+            <span asp-validation-for="name" />
 
             <!--input EMAIL-->
-            <input type="email" id="email" placeholder="Email (e.g., johndoe@gmail.com)"/>
+            <input type="email" asp-for="email" placeholder="Email (e.g., johndoe@gmail.com)"/>
+            <span asp-validation-for="email" />
+
 
             <!--input PASSWORD-->
-            <input type="password" id="password" placeholder="Password"/>
+            <input type="password" asp-for="password" placeholder="Password"/>
+            <span asp-validation-for="password" />
 
             <!--input CONFIRM PASSWORD-->
-            <input type="password" id="confirmPasswordr" placeholder="Confirm Password"/>
+            <input type="password" asp-for="confirmPassword" placeholder="Confirm Password"/>
+            <span asp-validation-for="confirmPassword" />
 
             <button type="submit">Register</button>
 
