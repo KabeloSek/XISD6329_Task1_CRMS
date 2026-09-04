@@ -43,7 +43,7 @@ body {
         margin: 0;
     }
 
-/*grid layout for the four dashboard cards*/
+/*grid layout for the dashboard cards*/
 .card-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -66,7 +66,6 @@ body {
         transform: translateY(-3px);
         box-shadow: 0 12px 28px rgba(0, 85, 165, 0.15);
     }
-
     /*button fills the whole card, styled as a card face not a typical button*/
     .card button {
         width: 100%;
@@ -83,6 +82,13 @@ body {
         flex-direction: column;
         justify-content: center;
         gap: 6px;
+    }
+    /*when there's an odd card left alone in the last row (e.g. Profile), center it under the row above*/
+    .card:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        justify-self: center;
+        width: 50%;
+        min-width: 200px;
     }
 
 .card-title {
@@ -122,5 +128,9 @@ body {
 @media (max-width: 480px) {
     .card-grid {
         grid-template-columns: 1fr;
+    }
+
+    .card:last-child:nth-child(odd) {
+        width: 100%;
     }
 }

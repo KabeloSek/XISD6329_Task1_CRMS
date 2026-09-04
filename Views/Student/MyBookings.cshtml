@@ -18,6 +18,23 @@
         </button>
     </div>
 
+    <h2>Pending</h2>
+    <div class="booking-list">
+        @foreach (var booking in Model.Where(b => b.status == "Pending"))
+        {
+            <div class="booking-card">
+                <p class="booking-room">Room @booking.roomNumber</p>
+                <p>@booking.bookingDate.ToString("dd MMM yyyy") · @booking.timeSlot</p>
+                <p>@booking.cleaningType Cleaning</p>
+                <p class="booking-cleaner">Waiting for a cleaner to accept</p>
+            </div>
+        }
+        @if (!Model.Any(b => b.status == "Pending"))
+        {
+            <p class="empty-state">No pending requests.</p>
+        }
+    </div>
+
     <h2>In Progress</h2>
     <div class="booking-list">
         @foreach (var booking in Model.Where(b => b.status == "In Progress"))

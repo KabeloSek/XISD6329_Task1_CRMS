@@ -293,6 +293,6 @@ namespace XISD6329_Task1_CRMS.Models
             }
 
             return bookings;
-        }
+        }//end GetStudentBookings
     }
 }

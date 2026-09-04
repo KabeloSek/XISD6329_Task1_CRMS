@@ -19,6 +19,8 @@
     </div>
 
     <form asp-action="RequestCleaningForm" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
         <label>Room Number</label>
         <p>@Model.roomNumber</p>
         <input type="hidden" asp-for="roomNumber" />
@@ -29,6 +31,7 @@
 
         <label>Select Room Type</label>
         <select asp-for="roomType">
+            <option value="">-- Select --</option>
             <option value="Single">Single</option>
             <option value="Sharing">Sharing</option>
             <option value="Bachelor">Bachelor</option>
@@ -37,6 +40,7 @@
 
         <label>Select Time</label>
         <select asp-for="timeSlot">
+            <option value="">-- Select --</option>
             <option value="8:30 AM - 10:00 AM">8:30 AM - 10:00 AM</option>
             <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
             <option value="12:30 PM - 2:00 PM">12:30 PM - 2:00 PM</option>
@@ -46,13 +50,14 @@
 
         <label>Type of Cleaning</label>
         <select asp-for="cleaningType">
+            <option value="">-- Select --</option>
             <option value="Regular">Regular</option>
             <option value="Deep">Deep</option>
             <option value="Move-in/Move-out">Move-in/Move-out</option>
         </select>
         <span asp-validation-for="cleaningType"></span>
 
-        <label>Special Instructions (Optional)</label>
+        <label>Special Instructions</label>
         <input type="text" asp-for="specialInstructions" placeholder="E.g. Please vacuum carpet thoroughly" />
 
         <button type="submit">Submit</button>

@@ -5,7 +5,7 @@
  
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design -->
-    <title>Register</title>
+    <title>Student Register</title>
 
     <link rel="stylesheet" href="~/css/Register.css"/>
 </head>
@@ -113,12 +113,10 @@
             <button type="submit">Register</button>
 
         </form>
-    <p>Already Registered? <a href="@Url.Action("Login","Home")">Login</a> </p>
+        <div>
+            <p>Already Registered? <a href="@Url.Action("Login","Home")">Login</a> </p>
 
-    <p><a href="@Url.Action("RegisterCleaner", "Home")">Register as Cleaner</a></p>
-
-
-    <a href="@Url.Action("StudentHome","Student")">Student Dashboard</a>
-
+            <p><a href="@Url.Action("RegisterCleaner", "Home")">Register as Cleaner</a></p>
+        </div>
 </body>
 </html>

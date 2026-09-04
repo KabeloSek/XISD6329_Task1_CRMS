@@ -132,25 +132,27 @@ button[type="submit"] {
 }
 
     button[type="submit"]:hover {
-        background: #0055a5;
+        background: var(--sp-orange-dark);
     }
 
     button[type="submit"]:active {
         transform: translateY(1px);
     }
 
-body > p:last-of-type {
-    margin-top: 20px;
+/*footer links (Already Registered? / Register as Cleaner) — now wrapped in a div, not bare body > p*/
+body > div p {
+    margin-top: 12px;
     font-size: 0.9rem;
+    text-align: center;
 }
 
-    body > p:last-of-type a {
+    body > div p a {
         color: var(--sp-orange);
         font-weight: 600;
         text-decoration: none;
     }
 
-        body > p:last-of-type a:hover {
+        body > div p a:hover {
             text-decoration: underline;
         }
 

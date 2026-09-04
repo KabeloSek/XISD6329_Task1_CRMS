@@ -3,14 +3,13 @@ using System.Data.SqlClient;
 
 namespace XISD6329_Task1_CRMS.Models
 {
-    public class CleaningRequestModel
+    public class CleaningRequestElseModel
     {
-        public int studentId { get; set; }
-
         [Required]
         public string roomNumber { get; set; }
 
         [Required(ErrorMessage = "Please select a date")]
+        [DataType(DataType.Date)]
         public DateTime bookingDate { get; set; }
 
         [Required]
@@ -24,9 +23,46 @@ namespace XISD6329_Task1_CRMS.Models
 
         public string specialInstructions { get; set; }
 
-        // externalBookingId REMOVED — this model has no such field, and its view has no such input
+        [Required(ErrorMessage = "Enter the External Booking ID of the student you're booking for")]
+        public string externalBookingId { get; set; }
 
-        private string connection = @"Server=(localdb)\south_point_system;Database=southpoint_database;Trusted_Connection=True;";
+        private string connection = @"Server=(localdb)\south_point_system;Database=southpoint_database;";
+
+        public int? FindStudentByExternalId(string externalBookingId)
+        {
+            int? studentId = null;
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(connection))
+                {
+                    connect.Open();
+
+                    string query = @"SELECT StudentID FROM Student WHERE ExternalBookingID=@ExternalBookingID";
+
+                    using (SqlCommand command = new SqlCommand(query, connect))
+                    {
+                        command.Parameters.AddWithValue("@ExternalBookingID", externalBookingId);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                studentId = (int)reader["StudentID"];
+                            }
+                        }
+                    }
+
+                    connect.Close();
+                }
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine("Error validating External Booking ID: " + error.Message);
+            }
+
+            return studentId;
+        }
 
         public void StoreBooking(int studentId, string roomNumber, DateTime bookingDate, string roomType, string timeSlot, string cleaningType, string specialInstructions)
         {
@@ -65,7 +101,7 @@ namespace XISD6329_Task1_CRMS.Models
                     using (SqlCommand notify = new SqlCommand(insertNotification, connect))
                     {
                         notify.Parameters.AddWithValue("@StudentID", studentId);
-                        notify.Parameters.AddWithValue("@Message", "Your cleaning request has been submitted. Give this passkey to your cleaner once the job is done.");
+                        notify.Parameters.AddWithValue("@Message", "A cleaning request has been submitted on your behalf. Give this passkey to your cleaner once the job is done.");
                         notify.Parameters.AddWithValue("@BookingID", bookingId);
                         notify.Parameters.AddWithValue("@Passkey", passkey);
                         notify.Parameters.AddWithValue("@BookingDate", bookingDate);
@@ -78,9 +114,9 @@ namespace XISD6329_Task1_CRMS.Models
             catch (Exception error)
             {
                 Console.WriteLine("Booking could not be inserted: " + error.Message);
-                throw; //temporarily rethrow so the error surfaces instead of vanishing — remove once confirmed working
+                throw; //temporarily rethrow — remove once confirmed working
             }
-        }//end StoreBooking
+        }
 
         private string GenerateUniquePasskey(SqlConnection connect)
         {
@@ -100,6 +136,6 @@ namespace XISD6329_Task1_CRMS.Models
             } while (exists);
 
             return passkey;
-        }//end GenerateUniquePasskey
+        }
     }
 }

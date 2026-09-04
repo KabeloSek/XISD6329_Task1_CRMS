@@ -21,7 +21,7 @@ body {
     align-items: center;
     justify-content: center;
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #f5f5f5;
+    background: #e6f0fa;
     color: var(--sp-grey-text);
     padding: 40px 20px;
 }
@@ -97,7 +97,7 @@ span.field-validation-error {
 }
 
 button[type="submit"] {
-    background: var(--sp-orange);
+    background: #0055a5;
     color: var(--sp-white);
     border: none;
     border-radius: 8px;

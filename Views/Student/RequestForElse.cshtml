@@ -1,4 +1,4 @@
-﻿@model XISD6329_Task1_CRMS.Models.CleaningRequestModel
+﻿@model XISD6329_Task1_CRMS.Models.CleaningRequestElseModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,7 +126,7 @@
         </select>
         <span asp-validation-for="cleaningType"></span>
 
-        <label>Special Instructions (Optional)</label>
+        <label>Special Instructions</label>
         <input type="text" asp-for="specialInstructions" placeholder="E.g. Please vacuum carpet thoroughly" />
 
         <label>External Booking ID</label>

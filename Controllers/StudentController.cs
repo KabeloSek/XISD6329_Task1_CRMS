@@ -26,10 +26,7 @@ namespace XISD6329_Task1_CRMS.Controllers
         public IActionResult RequestCleaningForm()
         {
             int? studentId = HttpContext.Session.GetInt32("StudentID");
-            if (studentId == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
+            if (studentId == null) return RedirectToAction("Login", "Home");
 
             CleaningRequestModel model = new CleaningRequestModel
             {
@@ -43,47 +40,36 @@ namespace XISD6329_Task1_CRMS.Controllers
         public IActionResult RequestCleaningForm(CleaningRequestModel booking)
         {
             int? studentId = HttpContext.Session.GetInt32("StudentID");
-            if (studentId == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
+            if (studentId == null) return RedirectToAction("Login", "Home");
 
             if (ModelState.IsValid)
             {
                 CleaningRequestModel request = new CleaningRequestModel();
                 request.StoreBooking(studentId.Value, booking.roomNumber, booking.bookingDate, booking.roomType, booking.timeSlot, booking.cleaningType, booking.specialInstructions);
-
                 return RedirectToAction("MyBookings", "Student");
             }
 
             return View(booking);
         }
+
         [HttpGet]
         public IActionResult RequestForElse()
         {
             int? studentId = HttpContext.Session.GetInt32("StudentID");
-            if (studentId == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
+            if (studentId == null) return RedirectToAction("Login", "Home");
 
-            return View(new CleaningRequestModel());
+            return View(new CleaningRequestElseModel());
         }
 
         [HttpPost]
-        public IActionResult RequestForElse(CleaningRequestModel booking)
+        public IActionResult RequestForElse(CleaningRequestElseModel booking)
         {
             int? loggedInStudentId = HttpContext.Session.GetInt32("StudentID");
-            if (loggedInStudentId == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
+            if (loggedInStudentId == null) return RedirectToAction("Login", "Home");
 
             if (ModelState.IsValid)
             {
-                CleaningRequestModel request = new CleaningRequestModel();
-
-                //validate the External Booking ID actually belongs to a real student
+                CleaningRequestElseModel request = new CleaningRequestElseModel();
                 int? targetStudentId = request.FindStudentByExternalId(booking.externalBookingId);
 
                 if (targetStudentId == null)
@@ -122,16 +108,15 @@ namespace XISD6329_Task1_CRMS.Controllers
         public IActionResult StudentProfile()
         {
             string currentEmail = HttpContext.Session.GetString("StudentEmail");
-
             if (string.IsNullOrEmpty(currentEmail))
             {
                 return RedirectToAction("Login", "Home");
             }
 
             ProfileModel profile = new ProfileModel();
-            ProfileModel student = profile.Get_Student(currentEmail);
+            ProfileModel student = profile.Get_Student(currentEmail);   // <-- must pass THIS to the view
 
-            return View(student);
+            return View(student);   // <-- not View() and not View(new ProfileModel())
         }
 
         [HttpPost]
