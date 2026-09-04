@@ -1,21 +1,18 @@
-﻿@model XISD6329_Task1_CRMS.Models.ProfileModel
+﻿@model XISD6329_Task1_CRMS.Models.CleanerProfileModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile</title>
-    <link rel="stylesheet" href="~/css/StudentProfile.css" />
+    <link rel="stylesheet" href="~/css/CleanerProfile.css" />
 </head>
 <body>
     <div class="top-nav">
-        <button onclick="location.href='@Url.Action("StudentHome", "Student")'">
+        <button onclick="location.href='@Url.Action("CleanerHome", "Cleaner")'">
             <p class="nav-back">Back</p>
         </button>
         <h2 class="nav-title">Profile</h2>
-        <button onclick="location.href='@Url.Action("StudentNotifications", "Student")'">
-            <p class="nav-notif">Notifications</p>
-        </button>
     </div>
 
     @if (ViewBag.Message != null)
@@ -23,7 +20,7 @@
         <p class="profile-message">@ViewBag.Message</p>
     }
 
-    <form asp-action="StudentProfile" method="post">
+    <form asp-action="CleanerProfile" method="post">
 
         <!--EMAIL: read-only display, click "Change Email" to edit-->
         <h3>Email</h3>
@@ -39,10 +36,8 @@
             <input type="password" asp-for="password" id="passwordInput" readonly />
             <button type="button" class="link-btn" id="toggleStarBtn" onclick="togglePasswordVisibility()">Show</button>
         </div>
-        <!--small secondary action to expand the change-password fields-->
         <button type="button" class="link-btn small" onclick="toggleChangePassword()">Change Password</button>
 
-        <!--hidden by default, revealed by "Change Password"-->
         <div id="changePasswordSection" class="change-password-section" style="display:none;">
             <h4>New Password</h4>
             <input type="password" asp-for="newPassword" placeholder="Enter new password" />
@@ -52,15 +47,10 @@
             <span asp-validation-for="confirmNewPassword"></span>
         </div>
 
-        <h3>External Booking ID</h3>
-        <div>
-            <p>@Model.externalBookingId</p>
-        </div>
-
         <button type="submit" class="save-btn">Save Changes</button>
     </form>
 
-    <form asp-controller="Home" asp-action="Logout" method="post">
+    <form asp-controller="Home" asp-action="LogoutCleaner" method="post">
         <button type="submit">Logout</button>
     </form>
 

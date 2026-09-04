@@ -2,21 +2,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Bookings</title>
     <link rel="stylesheet" href="~/css/MyBookings.css" />
 </head>
 <body>
     <div class="top-nav">
-        <button onclick="location.href='@Url.Action("StudentHome", "Student")'">
+        <button onclick="location.href='@Url.Action("CleanerHome", "Cleaner")'">
             <p class="nav-back">Back</p>
         </button>
         <h2 class="nav-title">My Bookings</h2>
-        <button onclick="location.href='@Url.Action("StudentNotifications", "Student")'">
-            <p class="nav-notif">Notifications</p>
-        </button>
     </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <p class="profile-message">@TempData["Error"]</p>
+    }
 
     <h2>In Progress</h2>
     <div class="booking-list">
@@ -26,12 +26,16 @@
                 <p class="booking-room">Room @booking.roomNumber</p>
                 <p>@booking.bookingDate.ToString("dd MMM yyyy") · @booking.timeSlot</p>
                 <p>@booking.cleaningType Cleaning</p>
-                <p class="booking-cleaner">Cleaner: @booking.cleanerName</p>
+                <form asp-controller="Cleaner" asp-action="CompleteBooking" method="post">
+                    <input type="hidden" name="bookingId" value="@booking.bookingId" />
+                    <input type="text" name="passkey" placeholder="Ask student for passkey" required />
+                    <button type="submit" class="save-btn">Mark Complete</button>
+                </form>
             </div>
         }
         @if (!Model.Any(b => b.status == "In Progress"))
         {
-            <p class="empty-state">No bookings currently in progress.</p>
+            <p class="empty-state">Nothing in progress.</p>
         }
     </div>
 
@@ -43,15 +47,12 @@
                 <p class="booking-room">Room @booking.roomNumber</p>
                 <p>@booking.bookingDate.ToString("dd MMM yyyy") · @booking.timeSlot</p>
                 <p>@booking.cleaningType Cleaning</p>
-                <p class="booking-cleaner">Cleaner: @booking.cleanerName</p>
             </div>
         }
         @if (!Model.Any(b => b.status == "Completed"))
         {
-            <p class="empty-state">No completed bookings yet.</p>
+            <p class="empty-state">Nothing completed yet.</p>
         }
     </div>
-
-    <button onclick="location.href='@Url.Action("WhoCleaningIsFor", "Student")'">Request Cleaning</button>
 </body>
 </html>

@@ -50,13 +50,14 @@ namespace XISD6329_Task1_CRMS.Controllers
             if (ModelState.IsValid)
             {
                 LoginModel login = new LoginModel();
-                bool found = login.StudentLogin(user.email, user.password, out string studentName);
+                bool found = login.StudentLogin(user.email, user.password, out string studentName, out int studentId, out string studentRoom);
 
                 if (found)
                 {
-                    //store the logged-in student's name for this session
                     HttpContext.Session.SetString("StudentName", studentName);
                     HttpContext.Session.SetString("StudentEmail", user.email);
+                    HttpContext.Session.SetInt32("StudentID", studentId);
+                    HttpContext.Session.SetString("StudentRoom", studentRoom);
 
                     return RedirectToAction("StudentHome", "Student");
                 }
@@ -75,21 +76,46 @@ namespace XISD6329_Task1_CRMS.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterCleaner(RegisterModel users)
+        public IActionResult RegisterCleaner(CleanerRegisterModel cleaner)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                RegisterModel register = new RegisterModel();
-                register.StoreCleaner(users.name, users.email, users.password);
+                CleanerRegisterModel register = new CleanerRegisterModel();
+                register.StoreCleaner(cleaner.name, cleaner.email, cleaner.password);
+                return RedirectToAction("LoginCleaner", "Home");
             }
-            return View(users);
+            return View(cleaner);
         }
-
+        [HttpGet]
         public IActionResult LoginCleaner()
         {
             return View();
         }
-       
+
+        [HttpPost]
+        public IActionResult LoginCleaner(LoginModel cleaner)
+        {
+            if (ModelState.IsValid)
+            {
+                LoginModel login = new LoginModel();
+                bool found = login.CleanerLogin(cleaner.email, cleaner.password, out string cleanerName, out int cleanerId);
+
+                if (found)
+                {
+                    HttpContext.Session.SetString("CleanerName", cleanerName);
+                    HttpContext.Session.SetString("CleanerEmail", cleaner.email);
+                    HttpContext.Session.SetInt32("CleanerID", cleanerId);
+
+                    return RedirectToAction("CleanerHome", "Cleaner");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid email or password.");
+                }
+            }
+            return View(cleaner);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
