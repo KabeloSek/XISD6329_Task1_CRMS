@@ -41,10 +41,10 @@ namespace XISD6329_Task1_CRMS.Controllers
         {
             return View();
         }
-        public IActionResult ReportProblem()
-        {
+        public IActionResult ReportProblem() 
+        { 
             return View();
-        }
+        } 
         [HttpPost]
         [HttpPost]
         public IActionResult CleaningGuidelines()
