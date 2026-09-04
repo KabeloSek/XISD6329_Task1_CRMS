@@ -11,6 +11,13 @@
 
 </head>
 <body>
+    <div class="top-nav">
+        
+        <h2 class="nav-title">Home</h2>
+        <button onclick="location.href='@Url.Action("StudentNotifications", "Student")'">
+            <p class="nav-notif">Notifications</p>
+        </button>
+    </div>
     <header class="dashboard-header">
         <h1>Hello @ViewBag.StudentName</h1>
        <p>What would you like to do today</p>

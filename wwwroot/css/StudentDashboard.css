@@ -25,6 +25,60 @@ body {
     align-items: center;
 }
 
+/*top nav bar: Back | Title | Notifications — grid so it centers correctly even with a missing side button*/
+.top-nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background: var(--sp-orange-dark);
+    width: 100%;
+    padding: 16px 20px;
+    margin: -40px -20px 24px;
+    box-shadow: 0 2px 8px rgba(0, 85, 165, 0.06);
+}
+
+    .top-nav button {
+        background: none;
+        border: none;
+        padding: 6px 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+        .top-nav button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /*target by which label the button holds, not its position — works whether Back is present or not*/
+        .top-nav button:has(.nav-back) {
+            grid-column: 1;
+            justify-self: start;
+        }
+
+        .top-nav button:has(.nav-notif) {
+            grid-column: 3;
+            justify-self: end;
+        }
+
+.nav-back,
+.nav-notif {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--sp-white);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.nav-title {
+    grid-column: 2;
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--sp-white);
+    text-align: center;
+    white-space: nowrap;
+}
+
 /*header text*/
 .dashboard-header {
     text-align: center;
