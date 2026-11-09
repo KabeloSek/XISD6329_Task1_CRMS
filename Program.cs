@@ -3,6 +3,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Firebase (Authentication + Realtime Database), shared with the Android app
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient<XISD6329_Task1_CRMS.Services.FirebaseService>();
+
 // session support
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

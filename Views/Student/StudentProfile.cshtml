@@ -33,22 +33,21 @@
         </div>
         <span asp-validation-for="email"></span>
 
-        <!--PASSWORD: starred by default, toggle to reveal-->
+        <!--PASSWORD: Firebase never gives a password back, so it is always starred-->
         <h3>Password</h3>
         <div class="field-row">
-            <input type="password" asp-for="password" id="passwordInput" readonly />
-            <button type="button" class="link-btn" id="toggleStarBtn" onclick="togglePasswordVisibility()">Show</button>
+            <input type="password" value="********" id="passwordInput" readonly />
         </div>
         <!--small secondary action to expand the change-password fields-->
         <button type="button" class="link-btn small" onclick="toggleChangePassword()">Change Password</button>
 
-        <!--hidden by default, revealed by "Change Password"-->
         <div id="changePasswordSection" class="change-password-section" style="display:none;">
             <h4>New Password</h4>
             <input type="password" asp-for="newPassword" placeholder="Enter new password" />
 
             <h4>Confirm New Password</h4>
             <input type="password" asp-for="confirmNewPassword" placeholder="Confirm new password" />
+            <span asp-validation-for="newPassword"></span>
             <span asp-validation-for="confirmNewPassword"></span>
         </div>
 
@@ -56,6 +55,10 @@
         <div>
             <p>@Model.externalBookingId</p>
         </div>
+
+        <!--Firebase asks for the current password before it changes the email or password-->
+        <h3>Current Password</h3>
+        <input type="password" asp-for="currentPassword" placeholder="Needed to change your email or password" />
 
         <button type="submit" class="save-btn">Save Changes</button>
     </form>
@@ -80,18 +83,6 @@
             }
         }
 
-        function togglePasswordVisibility() {
-            const input = document.getElementById("passwordInput");
-            const btn = document.getElementById("toggleStarBtn");
-
-            if (input.type === "password") {
-                input.type = "text";
-                btn.textContent = "Hide";
-            } else {
-                input.type = "password";
-                btn.textContent = "Show";
-            }
-        }
 
         function toggleChangePassword() {
             const section = document.getElementById("changePasswordSection");

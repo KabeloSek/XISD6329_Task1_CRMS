@@ -1,59 +1,67 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XISD6329_Task1_CRMS.Models;
+using XISD6329_Task1_CRMS.Services;
 
 namespace XISD6329_Task1_CRMS.Controllers
 {
     public class CleanerController : Controller
     {
+        private readonly FirebaseService firebase;
+
+        public CleanerController(FirebaseService firebase)
+        {
+            this.firebase = firebase;
+        }
+
         public IActionResult CleanerHome()
         {
-            if (HttpContext.Session.GetInt32("CleanerID") == null)
+            if (!firebase.IsCleaner)
                 return RedirectToAction("LoginCleaner", "Home");
 
             return View();
         }
 
-        public IActionResult CleanerRequests()
+        // every cleaner sees every request that is still Pending
+        public async Task<IActionResult> CleanerRequests()
         {
-            if (HttpContext.Session.GetInt32("CleanerID") == null)
+            if (!firebase.IsCleaner)
                 return RedirectToAction("LoginCleaner", "Home");
 
-            CleanerModel model = new CleanerModel();
-            return View(model.GetOpenRequests());
+            var bookings = await firebase.OpenRequests();
+            return View(bookings.Select(BookingMapper.ToView).ToList());
         }
 
         [HttpPost]
-        public IActionResult AcceptBooking(int bookingId)
+        public async Task<IActionResult> AcceptBooking(string bookingId)
         {
-            int? cleanerId = HttpContext.Session.GetInt32("CleanerID");
-            string cleanerName = HttpContext.Session.GetString("CleanerName");
-            if (cleanerId == null) return RedirectToAction("LoginCleaner", "Home");
+            if (!firebase.IsCleaner)
+                return RedirectToAction("LoginCleaner", "Home");
 
-            CleanerModel model = new CleanerModel();
-            model.AcceptBooking(bookingId, cleanerId.Value, cleanerName);
+            bool accepted = await firebase.AcceptBooking(bookingId);
+            if (!accepted)
+            {
+                TempData["Error"] = "That request was already taken by another cleaner.";
+            }
 
             return RedirectToAction("CleanerRequests");
         }
 
-        public IActionResult CleanerBookings()
+        public async Task<IActionResult> CleanerBookings()
         {
-            int? cleanerId = HttpContext.Session.GetInt32("CleanerID");
-            if (cleanerId == null) return RedirectToAction("LoginCleaner", "Home");
+            if (!firebase.IsCleaner)
+                return RedirectToAction("LoginCleaner", "Home");
 
-            CleanerModel model = new CleanerModel();
-            return View(model.GetCleanerBookings(cleanerId.Value));
+            var bookings = await firebase.CleanerBookings();
+            return View(bookings.Select(BookingMapper.ToView).ToList());
         }
 
         [HttpPost]
-        public IActionResult CompleteBooking(int bookingId, string passkey)
+        public async Task<IActionResult> CompleteBooking(string bookingId, string passkey)
         {
-            int? cleanerId = HttpContext.Session.GetInt32("CleanerID");
-            string cleanerName = HttpContext.Session.GetString("CleanerName");
-            if (cleanerId == null) return RedirectToAction("LoginCleaner", "Home");
+            if (!firebase.IsCleaner)
+                return RedirectToAction("LoginCleaner", "Home");
 
-            CleanerModel model = new CleanerModel();
-            bool success = model.CompleteBooking(bookingId, passkey, cleanerName);
-
+            bool success = await firebase.CompleteBooking(bookingId, passkey ?? "");
             if (!success)
             {
                 TempData["Error"] = "Incorrect passkey — ask the student to confirm it.";
@@ -65,45 +73,34 @@ namespace XISD6329_Task1_CRMS.Controllers
         [HttpGet]
         public IActionResult CleanerProfile()
         {
-            string currentEmail = HttpContext.Session.GetString("CleanerEmail");
-            if (string.IsNullOrEmpty(currentEmail))
-            {
+            if (!firebase.IsCleaner)
                 return RedirectToAction("LoginCleaner", "Home");
-            }
 
-            CleanerProfileModel profile = new CleanerProfileModel();
-            CleanerProfileModel cleaner = profile.Get_Cleaner(currentEmail);
-
-            return View(cleaner);
+            return View(new CleanerProfileModel { name = firebase.CurrentName, email = firebase.CurrentEmail });
         }
 
         [HttpPost]
-        public IActionResult CleanerProfile(CleanerProfileModel updated)
+        public async Task<IActionResult> CleanerProfile(CleanerProfileModel updated)
         {
-            string currentEmail = HttpContext.Session.GetString("CleanerEmail");
-            if (string.IsNullOrEmpty(currentEmail))
-            {
+            if (!firebase.IsCleaner)
                 return RedirectToAction("LoginCleaner", "Home");
-            }
 
             if (ModelState.IsValid)
             {
-                CleanerProfileModel profile = new CleanerProfileModel();
-                bool success = profile.Update_Cleaner(currentEmail, updated.email, updated.newPassword);
-
-                if (success)
+                try
                 {
-                    HttpContext.Session.SetString("CleanerEmail", updated.email);
-                    ViewBag.Message = "Profile updated successfully.";
+                    ViewBag.Message = await firebase.UpdateCredentials(updated.currentPassword, updated.email, updated.newPassword);
                 }
-                else
+                catch (FirebaseException error)
                 {
-                    ViewBag.Message = "Update failed. That email may already be in use.";
+                    ViewBag.Message = error.Message;
                 }
             }
 
-            CleanerProfileModel refreshed = new CleanerProfileModel().Get_Cleaner(HttpContext.Session.GetString("CleanerEmail"));
-            return View(refreshed);
+            ModelState.Clear();   // so the form shows the current values, not what was typed
+
+            // always show the current email (a changed email only applies after the verification link)
+            return View(new CleanerProfileModel { name = firebase.CurrentName, email = firebase.CurrentEmail });
         }
     }
 }

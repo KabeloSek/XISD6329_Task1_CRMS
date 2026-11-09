@@ -1,42 +1,47 @@
 using System.Diagnostics;
-using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
 using XISD6329_Task1_CRMS.Models;
+using XISD6329_Task1_CRMS.Services;
 
 namespace XISD6329_Task1_CRMS.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly FirebaseService firebase;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(FirebaseService firebase)
         {
-            _logger = logger;
+            this.firebase = firebase;
         }
 
+        // ------------------------------------------------------------ student register
 
         [HttpGet]
         public IActionResult Register()
         {
-            //ensure tables exist before the form loads — no ModelState check needed on a fresh GET
-            RegisterModel register = new RegisterModel();
-            register.Create_tables();
             return View();
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterModel users)
+        public async Task<IActionResult> Register(RegisterModel users)
         {
             if (ModelState.IsValid)
             {
-                RegisterModel register = new RegisterModel();
-                register.StoreStudent(users.room, users.name, users.email, users.password);
-
-                //only after this succeeds should the student be able to log in
-                return RedirectToAction("Login", "Home");
+                try
+                {
+                    await firebase.RegisterStudent(users.room, users.name, users.email, users.password);
+                    // only after this succeeds can the student log in
+                    return RedirectToAction("Login", "Home");
+                }
+                catch (FirebaseException error)
+                {
+                    ModelState.AddModelError("", error.Message);
+                }
             }
             return View(users);
         }
+
+        // ------------------------------------------------------------ student login
 
         [HttpGet]
         public IActionResult Login()
@@ -45,29 +50,24 @@ namespace XISD6329_Task1_CRMS.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginModel user)
+        public async Task<IActionResult> Login(LoginModel user)
         {
             if (ModelState.IsValid)
             {
-                LoginModel login = new LoginModel();
-                bool found = login.StudentLogin(user.email, user.password, out string studentName, out int studentId, out string studentRoom);
-
-                if (found)
+                try
                 {
-                    HttpContext.Session.SetString("StudentName", studentName);
-                    HttpContext.Session.SetString("StudentEmail", user.email);
-                    HttpContext.Session.SetInt32("StudentID", studentId);
-                    HttpContext.Session.SetString("StudentRoom", studentRoom);
-
+                    await firebase.Login(user.email, user.password, "student");
                     return RedirectToAction("StudentHome", "Student");
                 }
-                else
+                catch (FirebaseException error)
                 {
-                    ModelState.AddModelError("", "Invalid email or password.");
+                    ModelState.AddModelError("", error.Message);
                 }
             }
             return View(user);
         }
+
+        // ------------------------------------------------------------ cleaner register
 
         [HttpGet]
         public IActionResult RegisterCleaner()
@@ -76,16 +76,25 @@ namespace XISD6329_Task1_CRMS.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterCleaner(CleanerRegisterModel cleaner)
+        public async Task<IActionResult> RegisterCleaner(CleanerRegisterModel cleaner)
         {
             if (ModelState.IsValid)
             {
-                CleanerRegisterModel register = new CleanerRegisterModel();
-                register.StoreCleaner(cleaner.name, cleaner.email, cleaner.password);
-                return RedirectToAction("LoginCleaner", "Home");
+                try
+                {
+                    await firebase.RegisterCleaner(cleaner.name, cleaner.email, cleaner.password);
+                    return RedirectToAction("LoginCleaner", "Home");
+                }
+                catch (FirebaseException error)
+                {
+                    ModelState.AddModelError("", error.Message);
+                }
             }
             return View(cleaner);
         }
+
+        // ------------------------------------------------------------ cleaner login
+
         [HttpGet]
         public IActionResult LoginCleaner()
         {
@@ -93,27 +102,35 @@ namespace XISD6329_Task1_CRMS.Controllers
         }
 
         [HttpPost]
-        public IActionResult LoginCleaner(LoginModel cleaner)
+        public async Task<IActionResult> LoginCleaner(LoginModel cleaner)
         {
             if (ModelState.IsValid)
             {
-                LoginModel login = new LoginModel();
-                bool found = login.CleanerLogin(cleaner.email, cleaner.password, out string cleanerName, out int cleanerId);
-
-                if (found)
+                try
                 {
-                    HttpContext.Session.SetString("CleanerName", cleanerName);
-                    HttpContext.Session.SetString("CleanerEmail", cleaner.email);
-                    HttpContext.Session.SetInt32("CleanerID", cleanerId);
-
+                    await firebase.Login(cleaner.email, cleaner.password, "cleaner");
                     return RedirectToAction("CleanerHome", "Cleaner");
                 }
-                else
+                catch (FirebaseException error)
                 {
-                    ModelState.AddModelError("", "Invalid email or password.");
+                    ModelState.AddModelError("", error.Message);
                 }
             }
             return View(cleaner);
+        }
+
+        // ------------------------------------------------------------ logout (student and cleaner)
+
+        public IActionResult Logout()
+        {
+            firebase.Logout();
+            return RedirectToAction("Login", "Home");
+        }
+
+        public IActionResult LogoutCleaner()
+        {
+            firebase.Logout();
+            return RedirectToAction("LoginCleaner", "Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -14,6 +14,7 @@
     <p>Enter the required details to Register</p>
 
     <form asp-action="RegisterCleaner" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <!--input NAME-->
         <input type="text" asp-for="name" placeholder="Name (e.g., John)" />
         <span asp-validation-for="name"></span>

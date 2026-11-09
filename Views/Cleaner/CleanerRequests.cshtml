@@ -13,6 +13,11 @@
         <h2 class="nav-title">Open Requests</h2>
     </div>
 
+    @if (TempData["Error"] != null)
+    {
+        <p class="profile-message">@TempData["Error"]</p>
+    }
+
     <div class="booking-list">
         @foreach (var booking in Model)
         {

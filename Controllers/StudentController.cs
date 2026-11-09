@@ -1,166 +1,176 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XISD6329_Task1_CRMS.Models;
+using XISD6329_Task1_CRMS.Services;
 
 namespace XISD6329_Task1_CRMS.Controllers
 {
     public class StudentController : Controller
     {
+        private readonly FirebaseService firebase;
+
+        public StudentController(FirebaseService firebase)
+        {
+            this.firebase = firebase;
+        }
+
         public IActionResult StudentHome()
         {
-            string studentName = HttpContext.Session.GetString("StudentName");
-
             //if there's no session, they never logged in — send them back
-            if (string.IsNullOrEmpty(studentName))
-            {
+            if (!firebase.IsStudent)
                 return RedirectToAction("Login", "Home");
-            }
 
-            ViewBag.StudentName = studentName;
+            ViewBag.StudentName = firebase.CurrentName;
             return View();
         }
+
         public IActionResult WhoCleaningIsFor()
         {
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
             return View();
         }
+
+        // ------------------------------------------------------------ request cleaning: for myself
+
         [HttpGet]
         public IActionResult RequestCleaningForm()
         {
-            int? studentId = HttpContext.Session.GetInt32("StudentID");
-            if (studentId == null) return RedirectToAction("Login", "Home");
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
 
-            CleaningRequestModel model = new CleaningRequestModel
-            {
-                roomNumber = HttpContext.Session.GetString("StudentRoom")
-            };
-
-            return View(model);
+            return View(new CleaningRequestModel { roomNumber = firebase.CurrentRoom });
         }
 
         [HttpPost]
-        public IActionResult RequestCleaningForm(CleaningRequestModel booking)
+        public async Task<IActionResult> RequestCleaningForm(CleaningRequestModel booking)
         {
-            int? studentId = HttpContext.Session.GetInt32("StudentID");
-            if (studentId == null) return RedirectToAction("Login", "Home");
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
 
             if (ModelState.IsValid)
             {
-                CleaningRequestModel request = new CleaningRequestModel();
-                request.StoreBooking(studentId.Value, booking.roomNumber, booking.bookingDate, booking.roomType, booking.timeSlot, booking.cleaningType, booking.specialInstructions);
-                return RedirectToAction("MyBookings", "Student");
+                try
+                {
+                    await firebase.CreateBooking(firebase.CurrentUid!, false, firebase.CurrentRoom, booking.bookingDate,
+                        booking.roomType, booking.timeSlot, booking.cleaningType, booking.specialInstructions);
+                    return RedirectToAction("MyBookings", "Student");
+                }
+                catch (FirebaseException error)
+                {
+                    ModelState.AddModelError("", error.Message);
+                }
             }
 
             return View(booking);
         }
 
+        // ------------------------------------------------------------ request cleaning: for someone else
+
         [HttpGet]
         public IActionResult RequestForElse()
         {
-            int? studentId = HttpContext.Session.GetInt32("StudentID");
-            if (studentId == null) return RedirectToAction("Login", "Home");
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
 
             return View(new CleaningRequestElseModel());
         }
 
         [HttpPost]
-        public IActionResult RequestForElse(CleaningRequestElseModel booking)
+        public async Task<IActionResult> RequestForElse(CleaningRequestElseModel booking)
         {
-            int? loggedInStudentId = HttpContext.Session.GetInt32("StudentID");
-            if (loggedInStudentId == null) return RedirectToAction("Login", "Home");
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
 
             if (ModelState.IsValid)
             {
-                CleaningRequestElseModel request = new CleaningRequestElseModel();
-                int? targetStudentId = request.FindStudentByExternalId(booking.externalBookingId);
-
-                if (targetStudentId == null)
+                try
                 {
-                    ModelState.AddModelError("externalBookingId", "That External Booking ID doesn't match any student.");
-                    return View(booking);
-                }
+                    string? targetStudentId = await firebase.FindStudentByExternalId(booking.externalBookingId);
 
-                request.StoreBooking(targetStudentId.Value, booking.roomNumber, booking.bookingDate, booking.roomType, booking.timeSlot, booking.cleaningType, booking.specialInstructions);
-                return RedirectToAction("MyBookings", "Student");
+                    if (targetStudentId == null)
+                    {
+                        ModelState.AddModelError("externalBookingId", "That External Booking ID doesn't match any student.");
+                        return View(booking);
+                    }
+
+                    await firebase.CreateBooking(targetStudentId, true, booking.roomNumber, booking.bookingDate,
+                        booking.roomType, booking.timeSlot, booking.cleaningType, booking.specialInstructions);
+                    return RedirectToAction("MyBookings", "Student");
+                }
+                catch (FirebaseException error)
+                {
+                    ModelState.AddModelError("", error.Message);
+                }
             }
 
             return View(booking);
         }
-        [HttpGet]
-        public IActionResult MyBookings()
-        {
-            int? studentId = HttpContext.Session.GetInt32("StudentID");
-            if (studentId == null) return RedirectToAction("Login", "Home");
 
-            CleanerModel model = new CleanerModel();
-            List<BookingViewModel> bookings = model.GetStudentBookings(studentId.Value);
-            return View(bookings);
+        // ------------------------------------------------------------ bookings + notifications
+
+        [HttpGet]
+        public async Task<IActionResult> MyBookings()
+        {
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
+
+            var bookings = await firebase.StudentBookings();
+            return View(bookings.Select(BookingMapper.ToView).ToList());
         }
-        [HttpGet]
-        public IActionResult StudentNotifications()
-        {
-            int? studentId = HttpContext.Session.GetInt32("StudentID");
-            if (studentId == null) return RedirectToAction("Login", "Home");
 
-            NotificationModel model = new NotificationModel();
-            List<NotificationViewModel> notifications = model.GetNotifications(studentId.Value);
-            return View(notifications);
+        [HttpGet]
+        public async Task<IActionResult> StudentNotifications()
+        {
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
+
+            var notifications = await firebase.Notifications();
+            return View(notifications.Select(BookingMapper.ToView).ToList());
         }
+
+        // ------------------------------------------------------------ profile
+
         [HttpGet]
-        public IActionResult StudentProfile()
+        public async Task<IActionResult> StudentProfile()
         {
-            string currentEmail = HttpContext.Session.GetString("StudentEmail");
-            if (string.IsNullOrEmpty(currentEmail))
-            {
-                return RedirectToAction("Login", "Home");
-            }
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
 
-            ProfileModel profile = new ProfileModel();
-            ProfileModel student = profile.Get_Student(currentEmail);   // <-- must pass THIS to the view
-
-            return View(student);   // <-- not View() and not View(new ProfileModel())
+            return View(await LoadProfile());
         }
 
         [HttpPost]
-        public IActionResult StudentProfile(ProfileModel updated)
+        public async Task<IActionResult> StudentProfile(ProfileModel updated)
         {
-            string currentEmail = HttpContext.Session.GetString("StudentEmail");
-
-            if (string.IsNullOrEmpty(currentEmail))
-            {
-                return RedirectToAction("Login", "Home");
-            }
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
 
             if (ModelState.IsValid)
             {
-                ProfileModel profile = new ProfileModel();
-                bool success = profile.Update_Student(currentEmail, updated.email, updated.newPassword);
-
-                if (success)
+                try
                 {
-                    //keep session in sync with the (possibly changed) email
-                    HttpContext.Session.SetString("StudentEmail", updated.email);
-                    ViewBag.Message = "Profile updated successfully.";
+                    ViewBag.Message = await firebase.UpdateCredentials(updated.currentPassword, updated.email, updated.newPassword);
                 }
-                else
+                catch (FirebaseException error)
                 {
-                    ViewBag.Message = "Update failed. That email may already be in use.";
+                    ViewBag.Message = error.Message;
                 }
             }
 
-            //re-fetch to show the current state either way
-            ProfileModel refreshed = new ProfileModel().Get_Student(HttpContext.Session.GetString("StudentEmail"));
-            return View(refreshed);
+            ModelState.Clear();   // so the form shows the current values, not what was typed
+            return View(await LoadProfile());
         }
+
+        private async Task<ProfileModel> LoadProfile()
+        {
+            UserProfile? profile = await firebase.GetProfile(firebase.CurrentUid!);
+            return new ProfileModel
+            {
+                name = firebase.CurrentName,
+                room = firebase.CurrentRoom,
+                email = firebase.CurrentEmail,
+                externalBookingId = profile?.ExternalBookingId ?? ""
+            };
+        }
+
+        // ------------------------------------------------------------ help pages
 
         public IActionResult StudentHelpSupport()
         {
             return View();
         }
-        public IActionResult ReportProblem() 
-        { 
-            return View();
-        } 
-        [HttpPost]
-        [HttpPost]
+
         public IActionResult CleaningGuidelines()
         {
             return View();
@@ -170,8 +180,19 @@ namespace XISD6329_Task1_CRMS.Controllers
         {
             return View();
         }
-        public IActionResult ReportProblem(string Issue, string Room, IFormFile Photo)
+
+        [HttpGet]
+        public IActionResult ReportProblem()
         {
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ReportProblem(string Issue, string Room, IFormFile Photo)
+        {
+            if (!firebase.IsStudent) return RedirectToAction("Login", "Home");
+
             if (string.IsNullOrWhiteSpace(Issue))
             {
                 ModelState.AddModelError("Issue", "Please describe the problem.");
@@ -192,13 +213,23 @@ namespace XISD6329_Task1_CRMS.Controllers
                 return View();
             }
 
-            TempData["SuccessMessage"] = "Report successfully submitted.";
+            try
+            {
+                // same as the Android app: the report is saved, the photo itself is not uploaded
+                await firebase.SubmitProblemReport(Issue, Room, true);
+                TempData["SuccessMessage"] = "Report successfully submitted.";
+            }
+            catch (FirebaseException error)
+            {
+                TempData["SuccessMessage"] = "Report could not be sent: " + error.Message;
+            }
 
             return RedirectToAction("ReportProblem");
         }
+
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
+            firebase.Logout();
             return RedirectToAction("Login", "Home");
         }
     }
