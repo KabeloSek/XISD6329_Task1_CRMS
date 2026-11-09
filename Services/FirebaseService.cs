@@ -403,8 +403,9 @@ namespace XISD6329_Task1_CRMS.Services
         // Cleaner accepts: Pending -> In Progress. Returns false if someone else got it first.
         public async Task<bool> AcceptBooking(string bookingId)
         {
-            Booking? booking = await GetBooking(bookingId);
-            if (booking == null || booking.Status != "Pending") return false;
+            // find it in the open requests list (the database rules allow cleaners to read it that way)
+            Booking? booking = (await OpenRequests()).FirstOrDefault(b => b.Id == bookingId);
+            if (booking == null) return false;
 
             booking.Status = "In Progress";
             booking.CleanerId = CurrentUid;
@@ -431,8 +432,9 @@ namespace XISD6329_Task1_CRMS.Services
         // so a wrong passkey is refused by the database (returns false).
         public async Task<bool> CompleteBooking(string bookingId, string enteredPasskey)
         {
-            Booking? booking = await GetBooking(bookingId);
-            if (booking == null || booking.Status != "In Progress") return false;
+            // find it in this cleaner's own bookings
+            Booking? booking = (await CleanerBookings()).FirstOrDefault(b => b.Id == bookingId && b.Status == "In Progress");
+            if (booking == null) return false;
 
             booking.Status = "Completed";
             booking.EnteredPasskey = enteredPasskey.Trim();
@@ -467,12 +469,6 @@ namespace XISD6329_Task1_CRMS.Services
         }
 
         // =============================================================== reading lists
-
-        private async Task<Booking?> GetBooking(string bookingId)
-        {
-            JsonNode? node = await Db(HttpMethod.Get, "bookings/" + Uri.EscapeDataString(bookingId));
-            return node == null ? null : ToBooking(bookingId, node);
-        }
 
         private async Task<List<Booking>> BookingsWhere(string field, string value)
         {
