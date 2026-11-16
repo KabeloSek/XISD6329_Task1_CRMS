@@ -10,14 +10,14 @@ namespace XISD6329_Task1_CRMS.Models
         public string? room { get; set; }
 
         [Required]
-        [EmailAddress]
+        [RegularExpression(Validation.EmailPattern, ErrorMessage = Validation.EmailMessage)]
         public string email { get; set; }
 
         //Firebase needs the current password before it will change the email or password
         public string? currentPassword { get; set; }
 
         //optional: only filled in if the student wants to change their password
-        [MinLength(6, ErrorMessage = "The password must be at least 6 characters")]
+        [RegularExpression(Validation.PasswordPattern, ErrorMessage = Validation.PasswordMessage)]
         public string? newPassword { get; set; }
 
         [Compare("newPassword", ErrorMessage = "Passwords do not match")]

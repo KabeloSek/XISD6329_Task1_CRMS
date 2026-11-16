@@ -153,7 +153,7 @@ namespace XISD6329_Task1_CRMS.Services
         private static string FriendlyAuthError(string? code)
         {
             code = code ?? "";
-            if (code.StartsWith("WEAK_PASSWORD")) return "Password must be at least 6 characters.";
+            if (code.StartsWith("WEAK_PASSWORD")) return "Password must be longer than 6 characters and include uppercase, lowercase, a number and a special character.";
             if (code.StartsWith("EMAIL_EXISTS")) return "That email is already registered.";
             if (code.StartsWith("TOO_MANY_ATTEMPTS")) return "Too many attempts. Please wait a bit and try again.";
             if (code.StartsWith("INVALID_EMAIL")) return "That email address is not valid.";

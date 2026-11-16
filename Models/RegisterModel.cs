@@ -12,11 +12,11 @@ namespace XISD6329_Task1_CRMS.Models
         public string name { get; set; }
 
         [Required]
-        [EmailAddress]
+        [RegularExpression(Validation.EmailPattern, ErrorMessage = Validation.EmailMessage)]
         public string email { get; set; }
 
         [Required]
-        [MinLength(6, ErrorMessage = "The password must be at least 6 characters")]
+        [RegularExpression(Validation.PasswordPattern, ErrorMessage = Validation.PasswordMessage)]
         public string password { get; set; }
 
         [Required]

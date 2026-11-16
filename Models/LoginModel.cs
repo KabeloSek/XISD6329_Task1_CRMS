@@ -6,7 +6,7 @@ namespace XISD6329_Task1_CRMS.Models
     public class LoginModel
     {
         [Required]
-        [EmailAddress]
+        [RegularExpression(Validation.EmailPattern, ErrorMessage = Validation.EmailMessage)]
         public string email { get; set; }
 
         [Required]
